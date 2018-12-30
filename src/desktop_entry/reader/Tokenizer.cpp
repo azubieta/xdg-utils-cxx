@@ -48,12 +48,87 @@ namespace xdg_utils {
                     return tokenizeGroupHeaderLine(raw);
 
                 // Entry Line
-                if (lexer.isAlfaNumeric()) {}
+                if (lexer.isAlfaNumeric()) {
+                    lineTokens.push_back(tokenizeEntryKey(raw));
+
+                    // after an entry key is expected a '[', '=' or a set of whitespaces and a '
+                    if (lexer.isOpenSquareBracket()) {
+                        auto locale = tokenizeEntryLocale(raw);
+                        lineTokens.push_back(locale);
+
+                        if (locale.type == UNKNOWN)
+                            return lineTokens;
+                    }
+
+                    if (lexer.isAssignment()) {
+                        auto value = tokenizeEntryValue(raw);
+                        lineTokens.push_back(value);
+                    }
+
+                    return lineTokens;
+
+                }
 
                 // if this section is reached the input doesn't conform with any known line type therefore we will
                 // consume the whole line and assume it's an UNKNOWN token
                 lineTokens.emplace_back(tokenizeUnknownLine(raw));
                 return lineTokens;
+            }
+
+            Token Tokenizer::tokenizeEntryValue(std::wstringstream& raw) {
+                // consume entry value
+                std::wstringstream value;
+                std::wstringstream sectionRaw;
+
+                // save '=' raw
+                sectionRaw << lexer.top();
+                while (lexer.consume() && !lexer.isEOL())
+                    value << lexer.top();
+
+                sectionRaw << value.str();
+                if (lexer.isEOL()) {
+                    lexer.consume();
+                    return Token(sectionRaw.str(), lexer.line(), value.str(), ENTRY_VALUE);
+                }
+
+
+                raw << sectionRaw.str();
+                return tokenizeUnknownLine(raw);
+            }
+
+            Token Tokenizer::tokenizeEntryLocale(std::wstringstream& raw) {
+                std::wstringstream rawSection;
+                std::wstringstream value;
+
+                rawSection << lexer.top();
+
+                while (lexer.consume() && !lexer.isEOL() && !lexer.isSpace() &&
+                       !lexer.isCloseSquareBracket() && !lexer.isOpenSquareBracket()) {
+                    rawSection << lexer.top();
+                    value << lexer.top();
+                }
+
+
+                if (lexer.isCloseSquareBracket()) {
+                    // consume ']' with trailing spaces
+                    do rawSection << lexer.top(); while (lexer.consume() && lexer.isSpace());
+
+                    raw << rawSection.str();
+                    return Token(rawSection.str(), lexer.line(), value.str(), ENTRY_LOCALE);
+                }
+
+                raw << rawSection.str();
+                return tokenizeUnknownLine(raw);
+            }
+
+            Token Tokenizer::tokenizeEntryKey(std::wstringstream& raw) {
+                std::wstringstream value;
+                do {
+                    raw << lexer.top();
+                    value << lexer.top();
+                } while (lexer.consume() && (lexer.isAlfaNumeric() || lexer.isDash()) && !lexer.isEOL());
+
+                return Token(raw.str(), lexer.line(), value.str(), ENTRY_KEY);
             }
 
             Token Tokenizer::tokenizeCommentLine(std::wstringstream& raw) {

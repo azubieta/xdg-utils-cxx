@@ -50,6 +50,13 @@ namespace xdg_utils {
                 std::vector<Token> tokenizeGroupHeaderLine(std::wstringstream& raw);
 
                 /**
+                 * Attemp to read a ENTRY_KEY token
+                 * @param raw input line
+                 * @return ENTRY_KEY token
+                 */
+                Token tokenizeEntryKey(std::wstringstream& raw);
+
+                /**
                  * Assume the current char as unexpected, read what remains from the line and create an UNKNOWN
                  * token. The token value will contain an error message string.
                  *
@@ -63,6 +70,10 @@ namespace xdg_utils {
                  * @param data stream where the consumed characters will be placed
                  */
                 void consumeLine(std::wstringstream& data);
+
+                Token tokenizeEntryLocale(std::wstringstream& raw);
+
+                Token tokenizeEntryValue(std::wstringstream& raw);
             };
         }
     }

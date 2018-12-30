@@ -51,6 +51,8 @@ namespace xdg_utils {
             bool Lexer::isAssignment() const { return c == L'='; }
 
             unsigned long Lexer::line() { return lineCont; }
+
+            bool Lexer::isDash() { return c == L'-'; }
         }
     }
 }

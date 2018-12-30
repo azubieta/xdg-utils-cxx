@@ -45,6 +45,8 @@ namespace xdg_utils {
                 bool isEOF() const;
 
                 unsigned long line();
+
+                bool isDash();
             };
         }
 

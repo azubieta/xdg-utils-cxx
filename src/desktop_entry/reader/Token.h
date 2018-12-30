@@ -11,9 +11,7 @@ namespace xdg_utils {
                 GROUP_HEADER,
                 ENTRY_KEY,
                 ENTRY_LOCALE,
-                ENTRY_VALUE_STR,
-                ENTRY_VALUE_NUM,
-                ENTRY_VALUE_BOOL,
+                ENTRY_VALUE,
                 UNKNOWN
             };
 
