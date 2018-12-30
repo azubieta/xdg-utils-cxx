@@ -45,3 +45,15 @@ TEST(TestDesktopEntryReaderTokenizer, tokenizeBrokenGroupHeader) {
 
     ASSERT_EQ(tokens, expectedTokens);
 }
+
+TEST(TestDesktopEntryReaderTokenizer, tokenizeEntry) {
+    const auto input = L"Name[es_ES]=Super App\n";
+    Tokenizer t(new std::wstringstream(input));
+    std::vector<Token> tokens = t.tokenize();
+
+    std::vector<Token> expectedTokens = {Token(L"Name", 0, L"Name", ENTRY_KEY),
+                                         Token(L"[es_ES]", 0, L"es_ES", ENTRY_LOCALE),
+                                         Token(L"Super App", 0, L"Super App", ENTRY_VALUE_STR)};
+
+    ASSERT_EQ(tokens, expectedTokens);
+}

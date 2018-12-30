@@ -31,22 +31,42 @@ namespace xdg_utils {
                 while (lexer.consume() && lexer.isSpace() && !lexer.isEOL())
                     raw << lexer.top();
 
-                // pure blank line
-                if (lexer.isEOL() || lexer.isEOF()) {
-                    lineTokens.emplace_back(Token(raw.str(), lexer.line(), raw.str(), COMMENT));
-                    return lineTokens;
-                }
-
-                // comment line
+                // Comment Line
                 if (lexer.isHash()) {
                     lineTokens.push_back(tokenizeCommentLine(raw));
                     return lineTokens;
                 }
 
+                // pure blank line also a Comment Line
+                if (lexer.isEOL() || lexer.isEOF()) {
+                    lineTokens.emplace_back(Token(raw.str(), lexer.line(), raw.str(), COMMENT));
+                    return lineTokens;
+                }
 
                 // Group Header
                 if (lexer.isOpenSquareBracket())
                     return tokenizeGroupHeaderLine(raw);
+
+                // Entry Line
+                if (lexer.isAlfaNumeric()) {}
+
+                // if this section is reached the input doesn't conform with any known line type therefore we will
+                // consume the whole line and assume it's an UNKNOWN token
+                lineTokens.emplace_back(tokenizeUnknownLine(raw));
+                return lineTokens;
+            }
+
+            Token Tokenizer::tokenizeCommentLine(std::wstringstream& raw) {
+                raw << lexer.top();
+
+                std::wstringstream value;
+                // consume the rest of the line
+                while (lexer.consume() && !lexer.isEOL()) {
+                    raw << lexer.top();
+                    value << lexer.top();
+                }
+
+                return Token(raw.str(), lexer.line(), value.str(), COMMENT);
             }
 
             std::vector<Token> Tokenizer::tokenizeGroupHeaderLine(std::wstringstream& raw) {
@@ -63,8 +83,8 @@ namespace xdg_utils {
                     value << lexer.top();
                 }
 
-                raw << lexer.top();
                 if (lexer.isCloseSquareBracket()) {
+                    raw << lexer.top();
                     // consume trailing spaces
                     while (lexer.consume() && lexer.isSpace() && !lexer.isEOL())
                         raw << lexer.top();
@@ -80,35 +100,27 @@ namespace xdg_utils {
 
                 // if this section is reached the input doesn't conform with the group header spec therefore the whole
                 // line must be consumed and it must be treated as an error
-                std::wstringstream errorMsg;
-                errorMsg << L"Unexpected char \'" << lexer.top() << L"\' at " << std::to_wstring(raw.str().size() - 1);
-
-                consumeLine(raw);
-                tokens.emplace_back(Token(raw.str(), lexer.line(), errorMsg.str(), UNKNOWN));
-
+                tokens.emplace_back(tokenizeUnknownLine(raw));
                 return tokens;
             }
 
+            Token Tokenizer::tokenizeUnknownLine(std::wstringstream& raw) {
+                std::wstringstream errorMsg;
+                errorMsg << L"Unexpected char \'" << lexer.top() << L"\' at "
+                         << std::to_wstring(raw.str().size());
+
+                consumeLine(raw);
+                return Token(raw.str(), lexer.line(), errorMsg.str(), UNKNOWN);
+            }
+
             void Tokenizer::consumeLine(std::wstringstream& data) {
+                data << lexer.top();
                 while (lexer.consume() && !lexer.isEOL())
                     data << lexer.top();
 
                 // Also consume the EOL char
                 if (lexer.isEOL())
                     lexer.consume();
-            }
-
-            Token Tokenizer::tokenizeCommentLine(std::wstringstream& raw) {
-                raw << lexer.top();
-
-                std::wstringstream value;
-                // consume the rest of the line
-                while (lexer.consume() && !lexer.isEOL()) {
-                    raw << lexer.top();
-                    value << lexer.top();
-                }
-
-                return Token(raw.str(), lexer.line(), value.str(), COMMENT);
             }
         }
     }

@@ -50,6 +50,15 @@ namespace xdg_utils {
                 std::vector<Token> tokenizeGroupHeaderLine(std::wstringstream& raw);
 
                 /**
+                 * Assume the current char as unexpected, read what remains from the line and create an UNKNOWN
+                 * token. The token value will contain an error message string.
+                 *
+                 * @param raw
+                 * @return
+                 */
+                Token tokenizeUnknownLine(std::wstringstream& raw);
+
+                /**
                  * Consume all characters until the end of the line
                  * @param data stream where the consumed characters will be placed
                  */
