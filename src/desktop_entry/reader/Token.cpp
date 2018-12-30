@@ -24,10 +24,12 @@ namespace xdg_utils {
             std::ostream& operator<<(std::ostream& os, const Token& token) {
                 // small type conversion to make it work
                 std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
-                std::string str8 = cv.to_bytes(token.raw);
+                std::string rawStr8 = cv.to_bytes(token.raw);
+                std::string valueStr8 = cv.to_bytes(token.value);
 
-                os << "raw: \"" << str8 << "\", ";
+                os << "raw: \"" << rawStr8 << "\", ";
                 os << "line: " << token.line << ", ";
+                os << "value: " << valueStr8 << ", ";
                 os << "type: " << token.type;
                 return os;
             }
@@ -43,6 +45,7 @@ namespace xdg_utils {
                     PROCESS_VAL(ENTRY_VALUE_STR);
                     PROCESS_VAL(ENTRY_VALUE_NUM);
                     PROCESS_VAL(ENTRY_VALUE_BOOL);
+                    PROCESS_VAL(UNKNOWN);
                 }
 #undef PROCESS_VAL
 

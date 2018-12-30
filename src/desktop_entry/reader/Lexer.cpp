@@ -23,6 +23,7 @@ namespace xdg_utils {
 
                     return true;
                 } else {
+                    c = L'\0';
                     eof = true;
                     return false;
                 }

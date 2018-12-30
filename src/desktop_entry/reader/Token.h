@@ -14,6 +14,7 @@ namespace xdg_utils {
                 ENTRY_VALUE_STR,
                 ENTRY_VALUE_NUM,
                 ENTRY_VALUE_BOOL,
+                UNKNOWN
             };
 
             struct Token {
