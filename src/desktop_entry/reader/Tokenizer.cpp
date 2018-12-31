@@ -75,25 +75,19 @@ namespace xdg_utils {
                 return lineTokens;
             }
 
-            Token Tokenizer::tokenizeEntryValue(std::wstringstream& raw) {
-                // consume entry value
+            Token Tokenizer::tokenizeEntryKey(std::wstringstream& raw) {
                 std::wstringstream value;
-                std::wstringstream sectionRaw;
+                do value << lexer.top();
+                while (lexer.consume() && (lexer.isAlfaNumeric() || lexer.isDash()) && !lexer.isEOL());
 
-                // save '=' raw
-                sectionRaw << lexer.top();
-                while (lexer.consume() && !lexer.isEOL())
-                    value << lexer.top();
+                raw << value.str();
 
-                sectionRaw << value.str();
-                if (lexer.isEOL()) {
+                while (lexer.isSpace()) {
+                    raw << lexer.top();
                     lexer.consume();
-                    return Token(sectionRaw.str(), lexer.line(), value.str(), ENTRY_VALUE);
                 }
 
-
-                raw << sectionRaw.str();
-                return tokenizeUnknownLine(raw);
+                return Token(raw.str(), lexer.line(), value.str(), ENTRY_KEY);
             }
 
             Token Tokenizer::tokenizeEntryLocale(std::wstringstream& raw) {
@@ -121,14 +115,23 @@ namespace xdg_utils {
                 return tokenizeUnknownLine(raw);
             }
 
-            Token Tokenizer::tokenizeEntryKey(std::wstringstream& raw) {
+            Token Tokenizer::tokenizeEntryValue(std::wstringstream& raw) {
+                // consume entry value
                 std::wstringstream value;
-                do {
-                    raw << lexer.top();
-                    value << lexer.top();
-                } while (lexer.consume() && (lexer.isAlfaNumeric() || lexer.isDash()) && !lexer.isEOL());
+                std::wstringstream sectionRaw;
 
-                return Token(raw.str(), lexer.line(), value.str(), ENTRY_KEY);
+                // save '=' raw
+                sectionRaw << lexer.top();
+                while (lexer.consume() && !lexer.isEOL())
+                    value << lexer.top();
+
+                sectionRaw << value.str();
+                if (lexer.isEOL() || lexer.isEOF())
+                    return Token(sectionRaw.str(), lexer.line(), value.str(), ENTRY_VALUE);
+
+
+                raw << sectionRaw.str();
+                return tokenizeUnknownLine(raw);
             }
 
             Token Tokenizer::tokenizeCommentLine(std::wstringstream& raw) {
@@ -164,10 +167,7 @@ namespace xdg_utils {
                     while (lexer.consume() && lexer.isSpace() && !lexer.isEOL())
                         raw << lexer.top();
 
-                    if (lexer.isEOL()) {
-                        // consume the EOL char
-                        lexer.consume();
-
+                    if (lexer.isEOL() || lexer.isEOF()) {
                         tokens.emplace_back(Token(raw.str(), lexer.line(), value.str(), GROUP_HEADER));
                         return tokens;
                     }
@@ -192,10 +192,6 @@ namespace xdg_utils {
                 data << lexer.top();
                 while (lexer.consume() && !lexer.isEOL())
                     data << lexer.top();
-
-                // Also consume the EOL char
-                if (lexer.isEOL())
-                    lexer.consume();
             }
         }
     }
