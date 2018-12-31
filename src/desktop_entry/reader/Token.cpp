@@ -35,7 +35,7 @@ namespace xdg_utils {
             }
 
             std::ostream& operator<<(std::ostream& os, const TokenType& tokenType) {
-                const char* s = 0;
+                const char* s = nullptr;
 #define PROCESS_VAL(p) case(p): s = #p; break;
                 switch (tokenType) {
                     PROCESS_VAL(COMMENT);
