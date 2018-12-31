@@ -44,24 +44,41 @@ namespace xdg_utils {
                  * Attempts to read the current line as a GROUP_HEADER token described as:
                  * GH -> [ (all ASCII chars but '[')+ ](spaces)*EOL
                  *
-                 * @param raw
-                 * @return
+                 * @param raw input line
+                 * @return GROUP_HEADER token if all goes ok UNKNOWN token in case of error
                  */
                 std::vector<Token> tokenizeGroupHeaderLine(std::wstringstream& raw);
 
                 /**
-                 * Attemp to read a ENTRY_KEY token
+                 * Attempt to read a ENTRY_KEY token described as
+                 * (any alphanumeric char)+
                  * @param raw input line
-                 * @return ENTRY_KEY token
+                 * @return ENTRY_KEY token if all goes ok UNKNOWN token in case of error
                  */
                 Token tokenizeEntryKey(std::wstringstream& raw);
+
+                /**
+                 * Attempt to read a ENTRY_LOCALE token described as:
+                 * [ (any ASCII char but ']' and '[')+ ] (space)+
+                 * @param raw input line
+                 * @return ENTRY_LOCALE token if all goes ok UNKNOWN token in case of error
+                 */
+                Token tokenizeEntryLocale(std::wstringstream& raw);
+
+                /**
+                 * Attempt to read a ENTRY_VALUE token described as:
+                 * = (any UTF-8 char) EOL
+                 * @param raw input line
+                 * @return ENTRY_VALUE token if all goes ok UNKNOWN token in case of error
+                 */
+                Token tokenizeEntryValue(std::wstringstream& raw);
 
                 /**
                  * Assume the current char as unexpected, read what remains from the line and create an UNKNOWN
                  * token. The token value will contain an error message string.
                  *
-                 * @param raw
-                 * @return
+                 * @param raw input line
+                 * @return UNKNOWN token
                  */
                 Token tokenizeUnknownLine(std::wstringstream& raw);
 
@@ -70,10 +87,6 @@ namespace xdg_utils {
                  * @param data stream where the consumed characters will be placed
                  */
                 void consumeLine(std::wstringstream& data);
-
-                Token tokenizeEntryLocale(std::wstringstream& raw);
-
-                Token tokenizeEntryValue(std::wstringstream& raw);
             };
         }
     }
