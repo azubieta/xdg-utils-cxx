@@ -39,6 +39,27 @@ namespace XdgUtils {
             return groups;
         }
 
+        std::vector<std::string> DesktopEntry::listGroupKeys(const std::string& group) {
+            std::vector<std::string> keys;
+
+            std::shared_ptr<AST::Group> gPtr;
+            // Find group
+            for (const auto node: impl->ast.getEntries())
+                if (auto a = dynamic_cast<AST::Group*>(node.get()))
+                    if (a->getValue() == group) {
+                        gPtr.reset(a);
+                        break;
+                    }
+
+            if (gPtr) {
+                for (const auto node: gPtr->getEntries())
+                    if (auto a = dynamic_cast<AST::Entry*>(node.get()))
+                        keys.push_back(a->getKey());
+            }
+
+            return keys;
+        }
+
         DesktopEntry::~DesktopEntry() = default;
     }
 

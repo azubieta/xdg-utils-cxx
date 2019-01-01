@@ -49,7 +49,7 @@ namespace XdgUtils {
              * @param group
              * @return names of the existent keys that belongs to <group>
              */
-            std::vector<std::string> listKeys(const std::string& group);
+            std::vector<std::string> listGroupKeys(const std::string& group);
 
             /**
              * @param path

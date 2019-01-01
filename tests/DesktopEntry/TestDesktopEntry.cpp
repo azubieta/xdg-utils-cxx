@@ -53,3 +53,15 @@ TEST_F(TestDesktopEntry, listGroups) {
 
     ASSERT_EQ(result, expected);
 }
+
+TEST_F(TestDesktopEntry, listGroupKeys) {
+    DesktopEntry::DesktopEntry entry;
+
+    auto in = new std::stringstream(exampleDesktopEntry);
+    entry.read(in);
+
+    std::vector<std::string> expected = {"Exec", "Name"};
+    std::vector<std::string> result = entry.listGroupKeys("Desktop Action Gallery");
+
+    ASSERT_EQ(result, expected);
+}
