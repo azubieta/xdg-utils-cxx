@@ -5,7 +5,7 @@
 namespace xdg_utils {
     namespace desktop_entry {
         namespace reader {
-            Lexer::Lexer(std::wstringstream* input) : input(input) {}
+            Lexer::Lexer(std::istream* input) : input(input) {}
 
             Lexer::~Lexer() = default;
 
@@ -30,7 +30,7 @@ namespace xdg_utils {
 
             }
 
-            wchar_t Lexer::top() {
+            char Lexer::top() {
                 return c;
             }
 

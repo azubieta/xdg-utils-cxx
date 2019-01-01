@@ -6,26 +6,40 @@
 namespace xdg_utils {
     namespace desktop_entry {
         namespace reader {
-            Tokenizer::Tokenizer(std::wstringstream* input) : lexer(input) {}
+            Tokenizer::Tokenizer(std::istream* input) : lexer(input) {}
 
             Tokenizer::~Tokenizer() = default;
 
-            std::vector<Token> Tokenizer::tokenize() {
-                std::vector<Token> tokens;
 
-                while (!lexer.isEOF()) {
-                    auto lineTokens = tokenizeLine();
-                    tokens.reserve(tokens.size() + lineTokens.size());
-                    tokens.insert(tokens.end(), lineTokens.begin(), lineTokens.end());
+            Token Tokenizer::get() const {
+                return *buffer.begin();
+            }
+
+            bool Tokenizer::consume() {
+                if (completed)
+                    return false;
+
+                // remove buffer top
+                if (!buffer.empty())
+                    buffer.erase(buffer.begin());
+
+                if (buffer.empty()) {
+                    if (lexer.isEOF())
+                        completed = true;
+                    else
+                        buffer = tokenizeLine();
                 }
 
+                return !completed;
+            }
 
-                return tokens;
+            bool Tokenizer::isCompleted() const {
+                return completed;
             }
 
             std::vector<Token> Tokenizer::tokenizeLine() {
                 std::vector<Token> lineTokens;
-                std::wstringstream raw;
+                std::stringstream raw;
 
                 // consume spaces
                 while (lexer.consume() && lexer.isSpace() && !lexer.isEOL())
@@ -75,8 +89,8 @@ namespace xdg_utils {
                 return lineTokens;
             }
 
-            Token Tokenizer::tokenizeEntryKey(std::wstringstream& raw) {
-                std::wstringstream value;
+            Token Tokenizer::tokenizeEntryKey(std::stringstream& raw) {
+                std::stringstream value;
                 do value << lexer.top();
                 while (lexer.consume() && (lexer.isAlfaNumeric() || lexer.isDash()) && !lexer.isEOL());
 
@@ -90,9 +104,9 @@ namespace xdg_utils {
                 return Token(raw.str(), lexer.line(), value.str(), ENTRY_KEY);
             }
 
-            Token Tokenizer::tokenizeEntryLocale(std::wstringstream& raw) {
-                std::wstringstream rawSection;
-                std::wstringstream value;
+            Token Tokenizer::tokenizeEntryLocale(std::stringstream& raw) {
+                std::stringstream rawSection;
+                std::stringstream value;
 
                 rawSection << lexer.top();
 
@@ -115,10 +129,10 @@ namespace xdg_utils {
                 return tokenizeUnknownLine(raw);
             }
 
-            Token Tokenizer::tokenizeEntryValue(std::wstringstream& raw) {
+            Token Tokenizer::tokenizeEntryValue(std::stringstream& raw) {
                 // consume entry value
-                std::wstringstream value;
-                std::wstringstream sectionRaw;
+                std::stringstream value;
+                std::stringstream sectionRaw;
 
                 // save '=' raw
                 sectionRaw << lexer.top();
@@ -134,10 +148,10 @@ namespace xdg_utils {
                 return tokenizeUnknownLine(raw);
             }
 
-            Token Tokenizer::tokenizeCommentLine(std::wstringstream& raw) {
+            Token Tokenizer::tokenizeCommentLine(std::stringstream& raw) {
                 raw << lexer.top();
 
-                std::wstringstream value;
+                std::stringstream value;
                 // consume the rest of the line
                 while (lexer.consume() && !lexer.isEOL()) {
                     raw << lexer.top();
@@ -147,13 +161,13 @@ namespace xdg_utils {
                 return Token(raw.str(), lexer.line(), value.str(), COMMENT);
             }
 
-            std::vector<Token> Tokenizer::tokenizeGroupHeaderLine(std::wstringstream& raw) {
+            std::vector<Token> Tokenizer::tokenizeGroupHeaderLine(std::stringstream& raw) {
                 std::vector<Token> tokens;
 
                 // save char '['
                 raw << lexer.top();
 
-                std::wstringstream value;
+                std::stringstream value;
                 // consume until a ']' is found
                 while (lexer.consume() && !lexer.isEOL() &&
                        !lexer.isCloseSquareBracket() && !lexer.isOpenSquareBracket()) {
@@ -179,19 +193,27 @@ namespace xdg_utils {
                 return tokens;
             }
 
-            Token Tokenizer::tokenizeUnknownLine(std::wstringstream& raw) {
-                std::wstringstream errorMsg;
-                errorMsg << L"Unexpected char \'" << lexer.top() << L"\' at "
-                         << std::to_wstring(raw.str().size());
+            Token Tokenizer::tokenizeUnknownLine(std::stringstream& raw) {
+                std::stringstream errorMsg;
+                errorMsg << "Unexpected char \'" << lexer.top() << "\' at "
+                         << std::to_string(raw.str().size());
 
                 consumeLine(raw);
                 return Token(raw.str(), lexer.line(), errorMsg.str(), UNKNOWN);
             }
 
-            void Tokenizer::consumeLine(std::wstringstream& data) {
+            void Tokenizer::consumeLine(std::stringstream& data) {
                 data << lexer.top();
                 while (lexer.consume() && !lexer.isEOL())
                     data << lexer.top();
+            }
+
+            std::vector<Token> Tokenizer::consumeAll() {
+                std::vector<Token> tokens;
+                while (consume())
+                    tokens.emplace_back(get());
+
+                return tokens;
             }
         }
     }

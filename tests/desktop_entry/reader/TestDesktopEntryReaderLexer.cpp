@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
-#include <Lexer.h>
+#include <reader/Lexer.h>
 
 using namespace xdg_utils::desktop_entry::reader;
 
 TEST(TestDesktopEntryReaderLexer, consume) {
-    const auto str = L"[Desktop Entry]\n";
-    Lexer l(new std::wstringstream(str));
+    const auto str = "[Desktop Entry]\n";
+    Lexer l(new std::stringstream(str));
 
     int i = 0;
     while (l.consume()) {
@@ -16,7 +16,7 @@ TEST(TestDesktopEntryReaderLexer, consume) {
 }
 
 TEST(TestDesktopEntryReaderLexer, classify) {
-    const auto str = L"#"   // Comment begin char
+    const auto str = "#"   // Comment begin char
                      " "    // white space
                      "\t"   // white space
                      "\n"   // EOL
@@ -25,7 +25,7 @@ TEST(TestDesktopEntryReaderLexer, classify) {
                      "="    // Assignment
                      "R";   // Regular char
 
-    Lexer l(new std::wstringstream(str));
+    Lexer l(new std::stringstream(str));
 
     l.consume();
     ASSERT_TRUE(l.isHash());
@@ -54,8 +54,8 @@ TEST(TestDesktopEntryReaderLexer, classify) {
 }
 
 TEST(TestDesktopEntryReaderLexer, lineCount) {
-    const auto str = L"\n\na";
-    Lexer l(new std::wstringstream(str));
+    const auto str = "\n\na";
+    Lexer l(new std::stringstream(str));
 
     int i = 0;
     while (l.consume()) {

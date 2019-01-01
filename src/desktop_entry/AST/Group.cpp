@@ -27,9 +27,13 @@ namespace xdg_utils {
 
             void Group::write(std::ostream& output) const {
                 output << headerRawValue << std::endl;
-                for (const auto& entry: entries) {
-                    entry->write(output);
-                    output << std::endl;
+
+                auto last = --(entries.end());
+                for (auto itr = entries.begin(); itr != entries.end(); ++itr) {
+                    itr->get()->write(output);
+
+                    if (itr != last)
+                        output << std::endl;
                 }
             }
 

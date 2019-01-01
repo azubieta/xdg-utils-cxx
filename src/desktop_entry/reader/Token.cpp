@@ -6,7 +6,7 @@
 namespace xdg_utils {
     namespace desktop_entry {
         namespace reader {
-            Token::Token(const std::wstring& raw, unsigned long line, const std::wstring& value,
+            Token::Token(const std::string& raw, unsigned long line, const std::string& value,
                          xdg_utils::desktop_entry::reader::TokenType type) : raw(raw), line(line), value(value),
                                                                              type(type) {}
 
@@ -22,14 +22,9 @@ namespace xdg_utils {
             }
 
             std::ostream& operator<<(std::ostream& os, const Token& token) {
-                // small type conversion to make it work
-                std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
-                std::string rawStr8 = cv.to_bytes(token.raw);
-                std::string valueStr8 = cv.to_bytes(token.value);
-
-                os << "{ raw: \"" << rawStr8 << "\", ";
+                os << "{ raw: \"" << token.raw << "\", ";
                 os << "line: " << token.line << ", ";
-                os << "value: \"" << valueStr8 << "\", ";
+                os << "value: \"" << token.value << "\", ";
                 os << "type: " << token.type << " }";
                 return os;
             }

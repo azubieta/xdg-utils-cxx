@@ -7,13 +7,13 @@ namespace xdg_utils {
     namespace desktop_entry {
         namespace reader {
             class Lexer {
-                std::unique_ptr<std::wstringstream> input;
-                wchar_t c;
+                std::unique_ptr<std::istream> input;
+                char c;
                 unsigned long lineCont = 0;
                 bool eol = false;   // Line increment flag
                 bool eof = false;   // EOF flag
             public:
-                explicit Lexer(std::wstringstream* input);
+                explicit Lexer(std::istream* input);
 
                 virtual ~Lexer();
 
@@ -26,7 +26,7 @@ namespace xdg_utils {
                 /**
                  * @return Last read character
                  */
-                wchar_t top();
+                char top();
 
                 bool isAlfaNumeric() const;
 

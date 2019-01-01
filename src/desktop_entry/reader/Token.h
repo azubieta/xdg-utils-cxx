@@ -16,12 +16,12 @@ namespace xdg_utils {
             };
 
             struct Token {
-                std::wstring raw;
+                std::string raw;
                 unsigned long line;
-                std::wstring value;
+                std::string value;
                 TokenType type;
 
-                Token(const std::wstring& raw, unsigned long line, const std::wstring& value, TokenType type);
+                Token(const std::string& raw, unsigned long line, const std::string& value, TokenType type);
 
                 bool operator==(const Token& rhs) const;
 

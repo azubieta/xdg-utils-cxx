@@ -104,5 +104,5 @@ TEST(TestAST, write) {
               "# Test\n"
               "[Desktop Entry]\n"
               " Name=My App\n"
-              "# Test\n");
+              "# Test");
 }

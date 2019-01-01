@@ -42,3 +42,17 @@ TEST(TestGroup, compare) {
 
     ASSERT_NE(g1, g2);
 }
+
+TEST(TestGroup, write) {
+    Group g1("[Desktop Entry]", "Desktop Entry");;
+
+    std::vector<std::shared_ptr<Node>> entries1;
+    entries1.emplace_back(new Entry(" Name", "Name", "", "", "=My App", "My App"));
+    entries1.emplace_back(new Comment("# Test", " Test"));
+    g1.setEntries(entries1);
+
+    std::stringstream res;
+    g1.write(res);
+
+    ASSERT_EQ(res.str(), "[Desktop Entry]\n Name=My App\n# Test");
+}
