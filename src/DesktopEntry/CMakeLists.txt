@@ -1,26 +1,24 @@
-if(XDG_UTILS_DESKTOP_ENTRY)
-    project(XdfUtilsDesktopEntry)
+project(XdgUtilsDesktopEntry)
 
-    add_subdirectory(AST)
-    add_subdirectory(Reader)
+add_subdirectory(AST)
+add_subdirectory(Reader)
 
-    add_library(
-        ${PROJECT_NAME} STATIC
+add_library(
+    ${PROJECT_NAME} STATIC
 
-        DesktopEntry.cpp
+    DesktopEntry.cpp
 
-        $<TARGET_OBJECTS:DesktopEntryAST>
-        $<TARGET_OBJECTS:DesktopEntryReader>
-    )
+    $<TARGET_OBJECTS:DesktopEntryAST>
+    $<TARGET_OBJECTS:DesktopEntryReader>
+)
 
-    target_include_directories(
-        ${PROJECT_NAME}
-        PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+target_include_directories(
+    ${PROJECT_NAME}
+    PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
 
-        PUBLIC
-        $<BUILD_INTERFACE:${XdgUtils_SOURCE_DIR}/include/XdgUtils/DesktopEntry>
-        $<INSTALL_INTERFACE:include/XdgUtils/DesktopEntry>  # <prefix>/include/XdgUtils
-    )
+    PUBLIC
+    $<BUILD_INTERFACE:${XdgUtils_SOURCE_DIR}/include/XdgUtils/DesktopEntry>
+    $<INSTALL_INTERFACE:include/XdgUtils/DesktopEntry>  # <prefix>/include/XdgUtils
+)
 
-    add_library(XdgUtils::DesktopEntry ALIAS ${PROJECT_NAME})
-endif()
+add_library(XdgUtils::DesktopEntry ALIAS ${PROJECT_NAME})
