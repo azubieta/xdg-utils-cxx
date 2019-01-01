@@ -56,7 +56,7 @@ namespace XdgUtils {
                  * @return Group Node
                  * @throw MalformedEntry in case of errors
                  */
-                XdgUtils::DesktopEntry::AST::Group* readGroup(Tokenizer& tokenizer);
+                std::shared_ptr<AST::Group> readGroup(Tokenizer& tokenizer);
 
                 /**
                  * Read entry tokens

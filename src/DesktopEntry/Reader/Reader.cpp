@@ -19,12 +19,28 @@ namespace XdgUtils {
                 XdgUtils::DesktopEntry::AST::AST ast;
 
                 std::vector<std::shared_ptr<Node>> entries;
-                while (tokenizer.consume() && tokenizer.get().type != TokenType::UNKNOWN) {
-                    if (tokenizer.get().type == TokenType::COMMENT)
-                        entries.emplace_back(new Comment(tokenizer.get().raw, tokenizer.get().value));
+                tokenizer.consume();
 
-                    if (tokenizer.get().type == TokenType::GROUP_HEADER)
+                while (tokenizer.get().type != TokenType::UNKNOWN &&
+                       !tokenizer.isCompleted()) {
+
+                    if (tokenizer.get().type == TokenType::COMMENT) {
+                        entries.emplace_back(new Comment(tokenizer.get().raw, tokenizer.get().value));
+                        tokenizer.consume();
+
+                        continue;
+                    }
+
+                    if (tokenizer.get().type == TokenType::GROUP_HEADER) {
                         entries.emplace_back(readGroup(tokenizer));
+
+                        continue;
+                    }
+
+                    // only comments or group headers tokens can be found other things are an error
+                    std::stringstream err;
+                    err << "Unexpected token: " << tokenizer.get().type << " at line: " << tokenizer.get().line;
+                    throw MalformedEntry(err.str());
                 }
 
                 if (!tokenizer.isCompleted())
@@ -34,8 +50,8 @@ namespace XdgUtils {
                 return ast;
             }
 
-            XdgUtils::DesktopEntry::AST::Group* Reader::readGroup(Tokenizer& tokenizer) {
-                auto g = new Group(tokenizer.get().raw, tokenizer.get().value);
+            std::shared_ptr<Group> Reader::readGroup(Tokenizer& tokenizer) {
+                std::shared_ptr<Group> g(new Group(tokenizer.get().raw, tokenizer.get().value));
 
                 std::vector<std::shared_ptr<Node>> entries;
                 while (tokenizer.consume() &&

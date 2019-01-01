@@ -18,10 +18,10 @@ TEST(TestDesktopEntryReader, readWrite) {
     Reader r;
     AST a = r.read(new std::stringstream(data));
 
-    std::stringstream res;
-    a.write(res);
+    std::unique_ptr<std::stringstream> res(new std::stringstream());
+    a.write(res.get());
 
-    ASSERT_EQ(res.str(), data);
+    ASSERT_EQ(res->str(), data);
 }
 
 TEST(TestDesktopEntryReader, readBroken) {

@@ -51,17 +51,17 @@ namespace XdgUtils {
             }
 
             std::ostream& operator<<(std::ostream& os, const AST& ast) {
-                ast.write(os);
+                ast.write(&os);
                 return os;
             }
 
-            void AST::write(std::ostream& output) const {
+            void AST::write(std::ostream* output) const {
                 for (const auto& entry: entries) {
-                    entry->write(output);
+                    entry->write(*output);
 
                     // Comments entries doesn't print new lines
                     if (auto a = dynamic_cast<Comment*>((entry).get()))
-                        output << std::endl;
+                        *output << std::endl;
                 }
             }
         }

@@ -97,10 +97,10 @@ TEST(TestAST, write) {
 
     ast1.setEntries(ast1Entries);;
 
-    std::stringstream res;
-    ast1.write(res);
+    std::unique_ptr<std::stringstream> res(new std::stringstream());
+    ast1.write(res.get());
 
-    ASSERT_EQ(res.str(),
+    ASSERT_EQ(res->str(),
               "# Test\n"
               "[Desktop Entry]\n"
               " Name=My App\n"
