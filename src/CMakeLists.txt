@@ -1,1 +1,1 @@
-add_subdirectory(desktop_entry)
+add_subdirectory(DesktopEntry)
