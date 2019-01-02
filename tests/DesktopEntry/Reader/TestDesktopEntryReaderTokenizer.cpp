@@ -12,8 +12,9 @@ using namespace XdgUtils::DesktopEntry::Reader;
 
 TEST(TestDesktopEntryReaderTokenizer, tokenizeComments) {
     const auto input = "# Simple comment";
+    std::stringstream inputStream(input);
 
-    Tokenizer t(new std::stringstream(input));
+    Tokenizer t(inputStream);
     auto tokens = t.consumeAll();
 
     std::vector<Token> expectedTokens = {Token("# Simple comment", 0, " Simple comment", COMMENT)};
@@ -23,7 +24,9 @@ TEST(TestDesktopEntryReaderTokenizer, tokenizeComments) {
 
 TEST(TestDesktopEntryReaderTokenizer, tokenizeBlankLine) {
     const auto input = "   ";
-    Tokenizer t(new std::stringstream(input));
+    std::stringstream inputStream(input);
+
+    Tokenizer t(inputStream);
     auto tokens = t.consumeAll();
 
     std::vector<Token> expectedTokens = {Token("   ", 0, "   ", COMMENT)};
@@ -33,7 +36,9 @@ TEST(TestDesktopEntryReaderTokenizer, tokenizeBlankLine) {
 
 TEST(TestDesktopEntryReaderTokenizer, tokenizeGroupHeader) {
     const auto input = "  [Desktop Entry]  ";
-    Tokenizer t(new std::stringstream(input));
+    std::stringstream inputStream(input);
+
+    Tokenizer t(inputStream);
     auto tokens = t.consumeAll();
 
     std::vector<Token> expectedTokens = {Token("  [Desktop Entry]  ", 0, "Desktop Entry", GROUP_HEADER)};
@@ -43,7 +48,9 @@ TEST(TestDesktopEntryReaderTokenizer, tokenizeGroupHeader) {
 
 TEST(TestDesktopEntryReaderTokenizer, tokenizeBrokenGroupHeader) {
     const auto input = "[Desktop[ Entry]";
-    Tokenizer t(new std::stringstream(input));
+    std::stringstream inputStream(input);
+
+    Tokenizer t(inputStream);
     auto tokens = t.consumeAll();
 
     std::vector<Token> expectedTokens = {Token("[Desktop[ Entry]", 0, "Unexpected char '[' at 8", UNKNOWN)};
@@ -53,7 +60,9 @@ TEST(TestDesktopEntryReaderTokenizer, tokenizeBrokenGroupHeader) {
 
 TEST(TestDesktopEntryReaderTokenizer, tokenizeEntry) {
     const auto input = "Name=Super App";
-    Tokenizer t(new std::stringstream(input));
+    std::stringstream inputStream(input);
+
+    Tokenizer t(inputStream);
     auto tokens = t.consumeAll();
 
     std::vector<Token> expectedTokens = {Token("Name", 0, "Name", ENTRY_KEY),
@@ -64,7 +73,9 @@ TEST(TestDesktopEntryReaderTokenizer, tokenizeEntry) {
 
 TEST(TestDesktopEntryReaderTokenizer, tokenizeLocalizedEntry) {
     const auto input = "Name[es_ES] = Super App";
-    Tokenizer t(new std::stringstream(input));
+    std::stringstream inputStream(input);
+
+    Tokenizer t(inputStream);
     auto tokens = t.consumeAll();
     std::vector<Token> expectedTokens = {Token("Name", 0, "Name", ENTRY_KEY),
                                          Token("[es_ES] ", 0, "es_ES", ENTRY_LOCALE),
@@ -93,7 +104,9 @@ TEST(TestDesktopEntryReaderTokenizer, tokenizeCompleteDesktopEntry) {
                        "Exec=fooview --create-new\n"
                        "Name=Create a new Foo!\n"
                        "Icon=fooview-new";
-    Tokenizer t(new std::stringstream(input));
+    std::stringstream inputStream(input);
+
+    Tokenizer t(inputStream);
     auto tokens = t.consumeAll();
 
     std::vector<Token> expectedTokens = {

@@ -68,13 +68,13 @@ namespace XdgUtils {
              * @param input
              * @throw ReadError if something goes wrong
              */
-            void read(std::istream* input);
+            void read(std::istream& input);
 
             /**
              * Attempts to write this Desktop Entry to the <output> stream.
              * @param output
              */
-            void write(std::stringstream* output);
+            void write(std::stringstream& output);
 
         private:
             struct Impl;

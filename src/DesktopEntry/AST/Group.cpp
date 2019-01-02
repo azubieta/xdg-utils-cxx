@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Group.h"
 #include "Entry.h"
 #include "Comment.h"
@@ -88,7 +89,6 @@ namespace XdgUtils {
                 group.write(os);
                 return os;
             }
-
         }
     }
 }

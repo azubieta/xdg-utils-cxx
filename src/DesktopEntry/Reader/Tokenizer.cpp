@@ -2,17 +2,21 @@
 
 #include "Tokenizer.h"
 #include "Token.h"
+#include "Errors.h"
 
 namespace XdgUtils {
     namespace DesktopEntry {
         namespace Reader {
-            Tokenizer::Tokenizer(std::istream* input) : lexer(input) {}
+            Tokenizer::Tokenizer(std::istream& input) : lexer(input) {}
 
             Tokenizer::~Tokenizer() = default;
 
 
             Token Tokenizer::get() const {
-                return *buffer.begin();
+                if (buffer.begin() != buffer.end())
+                    return *buffer.begin();
+                else
+                    throw NoTokensLeft("There are no tokens left or Tokenizer::consume wasn't called.");
             }
 
             bool Tokenizer::consume() {

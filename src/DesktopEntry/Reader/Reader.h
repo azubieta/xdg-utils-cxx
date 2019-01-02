@@ -47,9 +47,8 @@ namespace XdgUtils {
                  * @return AST if all goes ok
                  * @throw MalformedEntry in case of errors
                  */
-                XdgUtils::DesktopEntry::AST::AST read(std::istream* input);
+                XdgUtils::DesktopEntry::AST::AST read(std::istream& input);
 
-            private:
                 /**
                  * Read Group tokens
                  * @param tokenizer

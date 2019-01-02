@@ -16,12 +16,13 @@ TEST(TestDesktopEntryReader, readWrite) {
 
 
     Reader r;
-    AST a = r.read(new std::stringstream(data));
+    std::stringstream in(data);
+    AST a = r.read(in);
 
-    std::unique_ptr<std::stringstream> res(new std::stringstream());
-    a.write(res.get());
+    std::stringstream res;
+    a.write(res);
 
-    ASSERT_EQ(res->str(), data);
+    ASSERT_EQ(res.str(), data);
 }
 
 TEST(TestDesktopEntryReader, readBroken) {
@@ -34,5 +35,6 @@ TEST(TestDesktopEntryReader, readBroken) {
 
 
     Reader r;
-    ASSERT_THROW(r.read(new std::stringstream(data)), std::runtime_error);
+    std::stringstream in(data);
+    ASSERT_THROW(r.read(in), std::runtime_error);
 }

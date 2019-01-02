@@ -7,13 +7,13 @@ namespace XdgUtils {
     namespace DesktopEntry {
         namespace Reader {
             class Lexer {
-                std::unique_ptr<std::istream> input;
+                std::istream &input;
                 char c;
                 unsigned long lineCont = 0;
                 bool eol = false;   // Line increment flag
                 bool eof = false;   // EOF flag
             public:
-                explicit Lexer(std::istream* input);
+                explicit Lexer(std::istream& input);
 
                 virtual ~Lexer();
 

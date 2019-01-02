@@ -5,12 +5,12 @@
 namespace XdgUtils {
     namespace DesktopEntry {
         namespace Reader {
-            Lexer::Lexer(std::istream* input) : input(input) {}
+            Lexer::Lexer(std::istream& input) : input(input) {}
 
             Lexer::~Lexer() = default;
 
             bool Lexer::consume() {
-                if (input->get(c)) {
+                if (input.get(c)) {
 
                     if (eol) {
                         lineCont++;

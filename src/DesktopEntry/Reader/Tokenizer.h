@@ -11,7 +11,7 @@ namespace XdgUtils {
             class Tokenizer {
                 Lexer lexer;
             public:
-                explicit Tokenizer(std::istream* input);
+                explicit Tokenizer(std::istream& input);
 
                 virtual ~Tokenizer();
 
@@ -19,7 +19,7 @@ namespace XdgUtils {
                  * Returns the current token
                  * @return
                  */
-                Token get() const ;
+                Token get() const;
 
                 /**
                  * Move to the next token

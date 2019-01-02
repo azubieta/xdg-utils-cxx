@@ -14,15 +14,14 @@ using namespace XdgUtils::DesktopEntry::AST;
 namespace XdgUtils {
     namespace DesktopEntry {
         namespace Reader {
-            AST::AST Reader::read(std::istream* input) {
+            AST::AST Reader::read(std::istream& input) {
                 Tokenizer tokenizer(input);
                 XdgUtils::DesktopEntry::AST::AST ast;
 
                 std::vector<std::shared_ptr<Node>> entries;
                 tokenizer.consume();
 
-                while (tokenizer.get().type != TokenType::UNKNOWN &&
-                       !tokenizer.isCompleted()) {
+                while (!tokenizer.isCompleted() && tokenizer.get().type != TokenType::UNKNOWN) {
 
                     if (tokenizer.get().type == TokenType::COMMENT) {
                         entries.emplace_back(new Comment(tokenizer.get().raw, tokenizer.get().value));
@@ -54,9 +53,8 @@ namespace XdgUtils {
                 std::shared_ptr<Group> g(new Group(tokenizer.get().raw, tokenizer.get().value));
 
                 std::vector<std::shared_ptr<Node>> entries;
-                while (tokenizer.consume() &&
-                       (tokenizer.get().type == TokenType::COMMENT ||
-                        tokenizer.get().type == TokenType::ENTRY_KEY)) {
+                while (!tokenizer.isCompleted() && tokenizer.consume() &&
+                       (tokenizer.get().type == TokenType::COMMENT || tokenizer.get().type == TokenType::ENTRY_KEY)) {
 
                     if (tokenizer.get().type == TokenType::ENTRY_KEY)
                         entries.emplace_back(readEntry(tokenizer));
@@ -65,7 +63,7 @@ namespace XdgUtils {
                         entries.emplace_back(new Comment(tokenizer.get().raw, tokenizer.get().value));
                 }
 
-                if (tokenizer.get().type == TokenType::UNKNOWN)
+                if (!tokenizer.isCompleted() && tokenizer.get().type == TokenType::UNKNOWN)
                     throw MalformedEntry(tokenizer.get().value);
 
                 g->setEntries(entries);

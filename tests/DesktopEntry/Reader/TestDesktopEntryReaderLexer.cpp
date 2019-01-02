@@ -6,7 +6,8 @@ using namespace XdgUtils::DesktopEntry::Reader;
 
 TEST(TestDesktopEntryReaderLexer, consume) {
     const auto str = "[Desktop Entry]\n";
-    Lexer l(new std::stringstream(str));
+    std::stringstream in(str);
+    Lexer l(in);
 
     int i = 0;
     while (l.consume()) {
@@ -25,7 +26,8 @@ TEST(TestDesktopEntryReaderLexer, classify) {
                      "="    // Assignment
                      "R";   // Regular char
 
-    Lexer l(new std::stringstream(str));
+    std::stringstream strStream(str);
+    Lexer l(strStream);
 
     l.consume();
     ASSERT_TRUE(l.isHash());
@@ -55,7 +57,8 @@ TEST(TestDesktopEntryReaderLexer, classify) {
 
 TEST(TestDesktopEntryReaderLexer, lineCount) {
     const auto str = "\n\na";
-    Lexer l(new std::stringstream(str));
+    std::stringstream strStream(str);
+    Lexer l(strStream);
 
     int i = 0;
     while (l.consume()) {

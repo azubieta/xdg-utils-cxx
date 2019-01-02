@@ -27,7 +27,7 @@ namespace XdgUtils {
 
                 bool operator!=(const AST& rhs) const;
 
-                void write(std::ostream* output) const;
+                void write(std::ostream& output) const;
 
                 friend std::ostream& operator<<(std::ostream& os, const AST& ast);
 
