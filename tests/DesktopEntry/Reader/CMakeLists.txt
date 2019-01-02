@@ -12,4 +12,8 @@ add_executable(
 target_include_directories(TestXdgUtilsDesktopEntryReader PRIVATE "${PROJECT_SOURCE_DIR}/src/DesktopEntry")
 target_link_libraries(TestXdgUtilsDesktopEntryReader GTest::GTest GTest::Main)
 
-gtest_discover_tests(TestXdgUtilsDesktopEntryReader)
+if(${CMAKE_VERSION} VERSION_LESS "3.10.0")
+    add_test(TestXdgUtilsDesktopEntryReader TestXdgUtilsDesktopEntryReader)
+else()
+    gtest_discover_tests(TestXdgUtilsDesktopEntryReader)
+endif()
