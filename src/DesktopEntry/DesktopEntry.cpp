@@ -154,6 +154,10 @@ namespace XdgUtils {
             }
         }
 
+        bool DesktopEntry::exists(const std::string& path) {
+            return impl->paths.find(path) != impl->paths.end();
+        }
+
         DesktopEntry::~DesktopEntry() = default;
     }
 

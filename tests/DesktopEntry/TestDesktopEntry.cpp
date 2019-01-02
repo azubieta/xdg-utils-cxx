@@ -122,3 +122,14 @@ TEST_F(TestDesktopEntry, set) {
     entry.set("Desktop Action Create/Name", "Create Foo!");
     ASSERT_EQ(entry.get("Desktop Action Create/Name"), "Create Foo!");
 }
+
+
+TEST_F(TestDesktopEntry, exists) {
+    DesktopEntry::DesktopEntry entry;
+
+    std::stringstream in(exampleDesktopEntry);
+    entry.read(in);
+
+    ASSERT_TRUE(entry.exists("Desktop Action Gallery/Name"));
+    ASSERT_FALSE(entry.exists("Desktop Action Gallery/Nam"));
+}
