@@ -136,3 +136,37 @@ TEST_F(TestDesktopEntry, exists) {
     ASSERT_TRUE(entry.exists("Desktop Action Gallery/Name"));
     ASSERT_FALSE(entry.exists("Desktop Action Gallery/Nam"));
 }
+
+TEST_F(TestDesktopEntry, removeGroup) {
+    DesktopEntry::DesktopEntry entry;
+
+    std::string entryStr = {"[G1]\nName=1\n[g2]\nName=2\n"};
+    std::stringstream in(entryStr);
+    entry.read(in);
+
+    ASSERT_TRUE(entry.exists("G1"));
+    entry.remove("G1");
+    ASSERT_FALSE(entry.exists("G1"));
+
+    std::stringstream out;
+    entry.write(out);
+
+    ASSERT_EQ(out.str(), "[g2]\nName=2\n");
+}
+
+TEST_F(TestDesktopEntry, removeEntry) {
+    DesktopEntry::DesktopEntry entry;
+
+    std::string entryStr = {"[G1]\nName=1\nIcon=1\n[g2]\nName=2\n"};
+    std::stringstream in(entryStr);
+    entry.read(in);
+
+    ASSERT_TRUE(entry.exists("G1/Icon"));
+    entry.remove("G1/Icon");
+    ASSERT_FALSE(entry.exists("G1/Icon"));
+
+    std::stringstream out;
+    entry.write(out);
+
+    ASSERT_EQ(out.str(), "[G1]\nName=1\n[g2]\nName=2\n");
+}

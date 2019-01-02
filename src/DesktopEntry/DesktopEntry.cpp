@@ -88,6 +88,46 @@ namespace XdgUtils {
 
                 return path.str();
             }
+
+            void removeGroup(const std::string& groupName) {
+                auto g = paths[groupName];
+
+                // remove item from the AST
+                auto astEntries = ast.getEntries();
+
+                auto itemItr = std::find(astEntries.begin(), astEntries.end(), g);
+                astEntries.erase(itemItr);
+
+                ast.setEntries(astEntries);
+
+                // remove path
+                paths.erase(groupName);
+            }
+
+            void removeEntry(const std::string& path) {
+                // Find path split
+                auto splitIdx = path.rfind('/');
+
+                if (splitIdx != std::string::npos) {
+                    auto groupName = path.substr(0, splitIdx);
+                    auto keyName = path.substr(splitIdx + 1, path.size() - splitIdx);
+
+                    auto groupNode = paths[groupName];
+                    auto entryNode = paths[path];
+
+                    AST::Group* g = dynamic_cast<AST::Group*>(groupNode.get());
+                    // remove item from the AST
+                    auto groupEntries = g->getEntries();
+
+                    auto itemItr = std::find(groupEntries.begin(), groupEntries.end(), groupNode);
+                    groupEntries.erase(itemItr);
+
+                    g->setEntries(groupEntries);
+
+                    // remove path
+                    paths.erase(path);
+                }
+            }
         };
 
         DesktopEntry::DesktopEntry() : impl(new Impl) {}
@@ -171,6 +211,18 @@ namespace XdgUtils {
 
         bool DesktopEntry::exists(const std::string& path) {
             return impl->paths.find(path) != impl->paths.end();
+        }
+
+        void DesktopEntry::remove(const std::string& path) {
+            if (exists(path)) {
+                auto splitIdx = path.rfind('/');
+
+                if (splitIdx != std::string::npos)
+                    impl->removeEntry(path);
+                else
+                    impl->removeGroup(path);
+
+            }
         }
 
         DesktopEntry::~DesktopEntry() = default;
