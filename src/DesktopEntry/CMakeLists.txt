@@ -8,8 +8,8 @@ add_library(
 
     DesktopEntry.cpp
 
-    $<TARGET_OBJECTS:DesktopEntryAST>
-    $<TARGET_OBJECTS:DesktopEntryReader>
+    $<TARGET_OBJECTS:XdgUtilsDesktopEntryAST>
+    $<TARGET_OBJECTS:XdgUtilsDesktopEntryReader>
 )
 
 target_include_directories(

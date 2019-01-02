@@ -126,7 +126,6 @@ TEST_F(TestDesktopEntry, set) {
     ASSERT_EQ(entry.get("Desktop Action Create/Name[es_ES]"), "Crear Foo");
 }
 
-
 TEST_F(TestDesktopEntry, exists) {
     DesktopEntry::DesktopEntry entry;
 

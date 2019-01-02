@@ -1,5 +1,5 @@
 add_library(
-    DesktopEntryReader OBJECT
+    XdgUtilsDesktopEntryReader OBJECT
 
     Lexer.cpp
     Token.cpp
@@ -8,4 +8,4 @@ add_library(
     Errors.h
 )
 
-target_include_directories(DesktopEntryReader PRIVATE "${PROJECT_SOURCE_DIR}")
+target_include_directories(XdgUtilsDesktopEntryReader PRIVATE "${PROJECT_SOURCE_DIR}")

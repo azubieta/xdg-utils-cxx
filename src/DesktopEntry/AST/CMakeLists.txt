@@ -1,5 +1,5 @@
 add_library(
-    DesktopEntryAST OBJECT OBJECT
+    XdgUtilsDesktopEntryAST OBJECT OBJECT
     AST.cpp
     Group.cpp
     Entry.cpp
