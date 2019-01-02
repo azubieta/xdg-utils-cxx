@@ -5,7 +5,14 @@ compiler: gcc
 notifications:
   email: false
 
+addons:
+  apt:
+    packages:
+      - cmake
+      - gcovr
+      - lcov
+
 script:
-  - cmake . -DCMAKE_BUILD_TYPE=Debug -DGTEST_ROOT=$HOME/googletest/_install
+  - cmake . -DCMAKE_BUILD_TYPE=Debug -DXDG_UTILS_CODE_COVERAGE=On
   - make
   - ctest -V
