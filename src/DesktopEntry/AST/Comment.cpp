@@ -13,7 +13,7 @@ namespace XdgUtils {
 
             Comment::Comment(const std::string& raw, const std::string& value) : raw(raw), value(value) {}
 
-            std::string Comment::getValue() {
+            std::string Comment::getValue() const {
                 return value;
             }
 

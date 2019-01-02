@@ -121,6 +121,9 @@ TEST_F(TestDesktopEntry, set) {
 
     entry.set("Desktop Action Create/Name", "Create Foo!");
     ASSERT_EQ(entry.get("Desktop Action Create/Name"), "Create Foo!");
+
+    entry.set("Desktop Action Create/Name[es_ES]", "Crear Foo");
+    ASSERT_EQ(entry.get("Desktop Action Create/Name[es_ES]"), "Crear Foo");
 }
 
 

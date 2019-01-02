@@ -12,7 +12,7 @@ namespace XdgUtils {
                     throw std::runtime_error("Group Header cannot be emtpy");
             }
 
-            std::string Group::getValue() {
+            std::string Group::getValue() const {
                 return headerValue;
             }
 

@@ -19,7 +19,7 @@ namespace XdgUtils {
                 : keyRaw(keyRaw), keyValue(keyValue), localeRaw(localeRaw),
                   localeValue(localeValue), valueRaw(valueRaw), valueValue(valueValue) {}
 
-            std::string Entry::getValue() {
+            std::string Entry::getValue() const {
                 return valueValue;
             }
 
@@ -39,11 +39,11 @@ namespace XdgUtils {
                 output << keyRaw << localeRaw << valueRaw;
             }
 
-            std::string Entry::getKey() {
+            std::string Entry::getKey() const {
                 return keyValue;
             }
 
-            std::string Entry::getLocale() {
+            std::string Entry::getLocale() const {
                 return localeValue;
             }
 

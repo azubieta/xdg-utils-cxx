@@ -22,7 +22,7 @@ namespace XdgUtils {
                  */
                 Group(const std::string& headerRawValue, const std::string& headerValue);
 
-                std::string getValue() override;
+                std::string getValue() const override;
 
                 /**
                  * @param newValue (cannot be empty)

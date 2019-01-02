@@ -32,7 +32,7 @@ namespace XdgUtils {
 
                         for (const auto& groupEntry: group->getEntries()) {
                             if (auto entry = dynamic_cast<AST::Entry*>(groupEntry.get())) {
-                                auto path = group->getValue() + "/" + entry->getKey() + entry->getLocale();
+                                auto path = createEntryPath(group->getValue(), *entry);
                                 paths[path] = groupEntry;
                             }
                         }
@@ -71,7 +71,22 @@ namespace XdgUtils {
                 group->setEntries(entries);
 
                 // update paths
-                paths[groupName + "/" + entry->getKey() + entry->getLocale()] = entry;
+                auto path = createEntryPath(groupName, *entry);
+                paths[path] = entry;
+            }
+
+            std::string createEntryPath(const std::string& groupName, const AST::Entry& entry) {
+                std::stringstream path;
+
+                if (!groupName.empty())
+                    path << groupName << '/';
+
+                path << entry.getKey();
+
+                if (!entry.getLocale().empty())
+                    path << '[' << entry.getLocale() << ']';
+
+                return path.str();
             }
         };
 

@@ -7,7 +7,7 @@ namespace XdgUtils {
         namespace AST {
             class Node {
             public:
-                virtual std::string getValue() = 0;
+                virtual std::string getValue() const = 0;
 
                 virtual void setValue(const std::string& newValue) = 0;
 

@@ -14,7 +14,7 @@ namespace XdgUtils {
             public:
                 Comment(const std::string& raw, const std::string& value);
 
-                std::string getValue() override;
+                std::string getValue() const override;
 
                 void setValue(const std::string& newValue) override;
 
