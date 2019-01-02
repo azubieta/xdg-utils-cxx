@@ -6,6 +6,6 @@ notifications:
   email: false
 
 script:
-  - cmake . -DCMAKE_BUILD_TYPE=Debug
+  - cmake . -DCMAKE_BUILD_TYPE=Debug -DGTEST_ROOT=$HOME/googletest/_install
   - make
   - ctest -V

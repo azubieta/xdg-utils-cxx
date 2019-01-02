@@ -1,5 +1,4 @@
-find_package(GTest REQUIRED)
-include(GoogleTest)
+include(cmake/EnableGoogleTest.cmake)
 
 if(XDG_UTILS_DESKTOP_ENTRY)
     add_subdirectory(DesktopEntry)
