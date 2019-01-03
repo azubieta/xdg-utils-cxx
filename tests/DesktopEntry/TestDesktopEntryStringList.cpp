@@ -42,3 +42,19 @@ TEST(TestDesktopEntryStringList, set) {
 
     ASSERT_EQ(stringList.dump(), "1;2;3;4;");
 }
+
+TEST(TestDesktopEntryStringList, append) {
+    DesktopEntryStringList stringList;
+    stringList.append("1");
+
+    ASSERT_EQ(stringList.size(), 1);
+    ASSERT_EQ(stringList[0], "1");
+}
+
+TEST(TestDesktopEntryStringList, remove) {
+    DesktopEntryStringList stringList("1;2");
+    stringList.remove(0);
+
+    ASSERT_EQ(stringList.size(), 1);
+    ASSERT_EQ(stringList[0], "2");
+}

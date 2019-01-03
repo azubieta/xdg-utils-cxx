@@ -7,21 +7,31 @@
 namespace XdgUtils {
     namespace DesktopEntry {
         /**
-         * Utility class to handle string list values at Desktop files.
+         * Utility class to handle 'string(s)' values in Desktop Entries.
          * More details at: https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s04.html
          */
         class DesktopEntryStringList {
         public:
+            DesktopEntryStringList();
+
             /**
-             * Create a instance from a DesktopEntry value
-             * @param data
-             */
+                         * Create a instance from a DesktopEntry value
+                         * @param data
+                         */
             explicit DesktopEntryStringList(const std::string& data);
 
             virtual ~DesktopEntryStringList();
 
+            /**
+             * @return total of strings contained
+             */
             unsigned long size() const;
 
+            /**
+             * Access string at <o>
+             * @param i
+             * @return string
+             */
             std::string& operator[](int i);
 
             /**
@@ -29,6 +39,18 @@ namespace XdgUtils {
              */
             std::string dump();
 
+
+            /**
+             * Append <string> at the end of the list
+             * @param string
+             */
+            void append(const std::string& string);
+
+            /**
+             * Remove item at <pos>
+             * @param pos
+             */
+            void remove(int pos);
 
         private:
             struct Priv;

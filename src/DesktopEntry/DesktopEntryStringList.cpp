@@ -62,6 +62,10 @@ namespace XdgUtils {
             };
         };
 
+        DesktopEntryStringList::DesktopEntryStringList() : priv(new Priv()) {
+
+        }
+
         DesktopEntryStringList::DesktopEntryStringList(const std::string& data) : priv(new Priv()) {
             priv->parse(data);
         }
@@ -76,6 +80,14 @@ namespace XdgUtils {
 
         std::string DesktopEntryStringList::dump() {
             return priv->dump();
+        }
+
+        void DesktopEntryStringList::append(const std::string& string) {
+            priv->sections.emplace_back(string);
+        }
+
+        void DesktopEntryStringList::remove(int pos) {
+            priv->sections.erase(priv->sections.begin() + pos);
         }
 
         DesktopEntryStringList::~DesktopEntryStringList() = default;
