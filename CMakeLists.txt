@@ -21,6 +21,10 @@ set(XDG_UTILS_CMAKE_DIR lib/cmake/XdgUtils CACHE PATH "Cmake configs install dir
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Sources
 if(XDG_UTILS_CODE_COVERAGE)
     message("Configuring project for code coverage mesurement")
