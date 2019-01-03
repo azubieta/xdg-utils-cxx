@@ -7,6 +7,7 @@ add_library(
     ${PROJECT_NAME} STATIC
 
     DesktopEntry.cpp
+    DesktopEntryExecValue.cpp
     DesktopEntryStringList.cpp
 
     $<TARGET_OBJECTS:XdgUtilsDesktopEntryAST>

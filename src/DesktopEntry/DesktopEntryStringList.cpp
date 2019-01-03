@@ -1,12 +1,9 @@
 // system
 #include <vector>
 #include <sstream>
-#include <DesktopEntry/DesktopEntryStringList.h>
-
-
 
 // local
-#include "DesktopEntry/DesktopEntryStringList.h"
+#include <DesktopEntry/DesktopEntryStringList.h>
 
 namespace XdgUtils {
     namespace DesktopEntry {
