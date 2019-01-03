@@ -1,5 +1,4 @@
 #include <locale>
-#include <codecvt>
 
 #include "Token.h"
 
