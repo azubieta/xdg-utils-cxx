@@ -132,21 +132,6 @@ namespace XdgUtils {
 
         DesktopEntry::DesktopEntry() : impl(new Impl) {}
 
-        void DesktopEntry::read(std::istream& input) {
-            try {
-                Reader::Reader reader;
-                impl->ast = reader.read(input);
-
-                impl->updatePaths();
-            } catch (const Reader::MalformedEntry& err) {
-                throw ReadError(err.what());
-            }
-        }
-
-        void DesktopEntry::write(std::stringstream& output) {
-            impl->ast.write(output);
-        }
-
         std::vector<std::string> DesktopEntry::listGroups() {
             std::vector<std::string> groups;
             for (const auto& node: impl->ast.getEntries())
@@ -223,6 +208,24 @@ namespace XdgUtils {
                     impl->removeGroup(path);
 
             }
+        }
+
+        std::ostream& operator<<(std::ostream& os, const DesktopEntry& entry) {
+            entry.impl->ast.write(os);
+            return os;
+        }
+
+        std::istream& operator>>(std::istream& is, const DesktopEntry& entry) {
+            try {
+                Reader::Reader reader;
+                entry.impl->ast = reader.read(is);
+
+                entry.impl->updatePaths();
+            } catch (const Reader::MalformedEntry& err) {
+                throw ReadError(err.what());
+            }
+
+            return is;
         }
 
         DesktopEntry::~DesktopEntry() = default;

@@ -64,17 +64,17 @@ namespace XdgUtils {
             void remove(const std::string& path);
 
             /**
-             * Attempts to read the <input> stream as a Desktop Entry. Any existent data will be replaced.
+             * Attempts to read the <is> stream as a Desktop Entry. Any existent data will be replaced.
              * @param input
              * @throw ReadError if something goes wrong
              */
-            void read(std::istream& input);
+            friend std::istream& operator>>(std::istream& is, const DesktopEntry& entry);
 
             /**
-             * Attempts to write this Desktop Entry to the <output> stream.
-             * @param output
-             */
-            void write(std::stringstream& output);
+              * Attempts to write this Desktop Entry to the <os> stream.
+              * @param output
+              */
+            friend std::ostream& operator<<(std::ostream& os, const DesktopEntry& entry);
 
         private:
             struct Impl;

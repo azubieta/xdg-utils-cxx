@@ -32,10 +32,10 @@ TEST_F(TestDesktopEntry, readWrite) {
     DesktopEntry::DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
-    entry.read(in);
+    in >> entry;
 
     std::stringstream out;
-    entry.write(out);
+    out << entry;
 
     ASSERT_EQ(in.str(), out.str());
 }
@@ -44,7 +44,7 @@ TEST_F(TestDesktopEntry, listGroups) {
     DesktopEntry::DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
-    entry.read(in);
+    in >> entry;
 
     std::vector<std::string> expected = {"Desktop Entry", "Desktop Action Gallery", "Desktop Action Create"};
     std::vector<std::string> result = entry.listGroups();
@@ -56,7 +56,7 @@ TEST_F(TestDesktopEntry, listGroupKeys) {
     DesktopEntry::DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
-    entry.read(in);
+    in >> entry;
 
     std::vector<std::string> expected = {"Exec", "Name"};
     std::vector<std::string> result = entry.listGroupKeys("Desktop Action Gallery");
@@ -88,7 +88,7 @@ TEST_F(TestDesktopEntry, get) {
     DesktopEntry::DesktopEntry entry;
 
     std::stringstream in(s);
-    entry.read(in);
+    in >> entry;
 
     ASSERT_EQ(entry.get("Desktop Entry/Name"), "Foo Viewer");
     ASSERT_EQ(entry.get("Desktop Action Gallery/Name"), "Browse Gallery");
@@ -99,7 +99,7 @@ TEST_F(TestDesktopEntry, set) {
     DesktopEntry::DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
-    entry.read(in);
+    in >> entry;
 
     entry.set("Spam", "");
     ASSERT_EQ(entry.get("Spam"), "Spam");
@@ -130,7 +130,7 @@ TEST_F(TestDesktopEntry, exists) {
     DesktopEntry::DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
-    entry.read(in);
+    in >> entry;
 
     ASSERT_TRUE(entry.exists("Desktop Action Gallery/Name"));
     ASSERT_FALSE(entry.exists("Desktop Action Gallery/Nam"));
@@ -141,14 +141,14 @@ TEST_F(TestDesktopEntry, removeGroup) {
 
     std::string entryStr = {"[G1]\nName=1\n[g2]\nName=2\n"};
     std::stringstream in(entryStr);
-    entry.read(in);
+    in >> entry;
 
     ASSERT_TRUE(entry.exists("G1"));
     entry.remove("G1");
     ASSERT_FALSE(entry.exists("G1"));
 
     std::stringstream out;
-    entry.write(out);
+    out << entry;
 
     ASSERT_EQ(out.str(), "[g2]\nName=2\n");
 }
@@ -158,14 +158,14 @@ TEST_F(TestDesktopEntry, removeEntry) {
 
     std::string entryStr = {"[G1]\nName=1\nIcon=1\n[g2]\nName=2\n"};
     std::stringstream in(entryStr);
-    entry.read(in);
+    in >> entry;
 
     ASSERT_TRUE(entry.exists("G1/Icon"));
     entry.remove("G1/Icon");
     ASSERT_FALSE(entry.exists("G1/Icon"));
 
     std::stringstream out;
-    entry.write(out);
+    out << entry;
 
     ASSERT_EQ(out.str(), "[G1]\nName=1\n[g2]\nName=2\n");
 }
