@@ -10,17 +10,17 @@ namespace XdgUtils {
          * Utility class to handle 'string(s)' values in Desktop Entries.
          * More details at: https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s04.html
          */
-        class DesktopEntryStringList {
+        class DesktopEntryStringsValue {
         public:
-            DesktopEntryStringList();
+            DesktopEntryStringsValue();
 
             /**
                          * Create a instance from a DesktopEntry value
                          * @param data
                          */
-            explicit DesktopEntryStringList(const std::string& data);
+            explicit DesktopEntryStringsValue(const std::string& data);
 
-            virtual ~DesktopEntryStringList();
+            virtual ~DesktopEntryStringsValue();
 
             /**
              * @return total of strings contained

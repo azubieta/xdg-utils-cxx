@@ -3,11 +3,11 @@
 #include <sstream>
 
 // local
-#include <DesktopEntry/DesktopEntryStringList.h>
+#include <DesktopEntry/DesktopEntryStringsValue.h>
 
 namespace XdgUtils {
     namespace DesktopEntry {
-        struct DesktopEntryStringList::Priv {
+        struct DesktopEntryStringsValue::Priv {
             std::vector<std::string> sections;
 
             void parse(const std::string& in) {
@@ -59,34 +59,34 @@ namespace XdgUtils {
             };
         };
 
-        DesktopEntryStringList::DesktopEntryStringList() : priv(new Priv()) {
+        DesktopEntryStringsValue::DesktopEntryStringsValue() : priv(new Priv()) {
 
         }
 
-        DesktopEntryStringList::DesktopEntryStringList(const std::string& data) : priv(new Priv()) {
+        DesktopEntryStringsValue::DesktopEntryStringsValue(const std::string& data) : priv(new Priv()) {
             priv->parse(data);
         }
 
-        unsigned long DesktopEntryStringList::size() const {
+        unsigned long DesktopEntryStringsValue::size() const {
             return priv->sections.size();
         }
 
-        std::string& DesktopEntryStringList::operator[](int i) {
+        std::string& DesktopEntryStringsValue::operator[](int i) {
             return priv->sections[i];
         }
 
-        std::string DesktopEntryStringList::dump() {
+        std::string DesktopEntryStringsValue::dump() {
             return priv->dump();
         }
 
-        void DesktopEntryStringList::append(const std::string& string) {
+        void DesktopEntryStringsValue::append(const std::string& string) {
             priv->sections.emplace_back(string);
         }
 
-        void DesktopEntryStringList::remove(int pos) {
+        void DesktopEntryStringsValue::remove(int pos) {
             priv->sections.erase(priv->sections.begin() + pos);
         }
 
-        DesktopEntryStringList::~DesktopEntryStringList() = default;
+        DesktopEntryStringsValue::~DesktopEntryStringsValue() = default;
     }
 }

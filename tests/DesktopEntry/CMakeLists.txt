@@ -4,7 +4,7 @@ add_subdirectory(Reader)
 add_executable(
     TestXdgUtilsDesktopEntry
     TestDesktopEntry.cpp
-    TestDesktopEntryStringList.cpp
+    TestDesktopEntryStringsValue.cpp
     TestDesktopEntryExecValue.cpp
 )
 

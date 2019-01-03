@@ -2,21 +2,21 @@
 #include <gtest/gtest.h>
 
 // local
-#include <DesktopEntry/DesktopEntryStringList.h>
+#include <DesktopEntry/DesktopEntryStringsValue.h>
 
 using namespace XdgUtils::DesktopEntry;
 
 TEST(TestDesktopEntryStringList, create) {
-    DesktopEntryStringList stringList("one;two;three");
+    DesktopEntryStringsValue stringList("one;two;three");
 }
 
 TEST(TestDesktopEntryStringList, size) {
-    DesktopEntryStringList stringList("part one;part two;three\\;;four;");
+    DesktopEntryStringsValue stringList("part one;part two;three\\;;four;");
     ASSERT_EQ(stringList.size(), 4);
 }
 
 TEST(TestDesktopEntryStringList, access) {
-    DesktopEntryStringList stringList("part one;part two;three\\;;four;;");
+    DesktopEntryStringsValue stringList("part one;part two;three\\;;four;;");
     ASSERT_EQ(stringList.size(), 5);
 
     std::vector<std::string> expected = {"part one", "part two", "three;", "four", ""};
@@ -27,13 +27,13 @@ TEST(TestDesktopEntryStringList, access) {
 
 TEST(TestDesktopEntryStringList, dump) {
     auto str = "part one;part two;three\\;;four;";
-    DesktopEntryStringList stringList(str);
+    DesktopEntryStringsValue stringList(str);
     ASSERT_EQ(stringList.dump(), str);
 }
 
 TEST(TestDesktopEntryStringList, set) {
     auto str = "part one;part two;three\\;;four;";
-    DesktopEntryStringList stringList(str);
+    DesktopEntryStringsValue stringList(str);
 
     stringList[0] = "1";
     stringList[1] = "2";
@@ -44,7 +44,7 @@ TEST(TestDesktopEntryStringList, set) {
 }
 
 TEST(TestDesktopEntryStringList, append) {
-    DesktopEntryStringList stringList;
+    DesktopEntryStringsValue stringList;
     stringList.append("1");
 
     ASSERT_EQ(stringList.size(), 1);
@@ -52,7 +52,7 @@ TEST(TestDesktopEntryStringList, append) {
 }
 
 TEST(TestDesktopEntryStringList, remove) {
-    DesktopEntryStringList stringList("1;2");
+    DesktopEntryStringsValue stringList("1;2");
     stringList.remove(0);
 
     ASSERT_EQ(stringList.size(), 1);
