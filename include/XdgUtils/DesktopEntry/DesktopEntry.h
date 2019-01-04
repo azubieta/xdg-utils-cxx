@@ -22,6 +22,8 @@ namespace XdgUtils {
         public:
             DesktopEntry();
 
+            DesktopEntry(const DesktopEntry& other);
+
             virtual ~DesktopEntry();
 
             /**
@@ -76,9 +78,10 @@ namespace XdgUtils {
               */
             friend std::ostream& operator<<(std::ostream& os, const DesktopEntry& entry);
 
+
         private:
-            struct Impl;
-            std::unique_ptr<Impl> impl;
+            struct Priv;
+            std::unique_ptr<Priv> priv;
         };
     }
 }

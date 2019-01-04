@@ -13,7 +13,7 @@
 
 namespace XdgUtils {
     namespace DesktopEntry {
-        struct DesktopEntry::Impl {
+        struct DesktopEntry::Priv {
             AST::AST ast;
 
             // Cache of the existent entries and their paths
@@ -130,11 +130,11 @@ namespace XdgUtils {
             }
         };
 
-        DesktopEntry::DesktopEntry() : impl(new Impl) {}
+        DesktopEntry::DesktopEntry() : priv(new Priv) {}
 
         std::vector<std::string> DesktopEntry::listGroups() {
             std::vector<std::string> groups;
-            for (const auto& node: impl->ast.getEntries())
+            for (const auto& node: priv->ast.getEntries())
                 if (auto a = dynamic_cast<AST::Group*>(node.get()))
                     groups.emplace_back(a->getValue());
 
@@ -145,8 +145,8 @@ namespace XdgUtils {
             std::vector<std::string> keys;
 
             // Find group
-            auto itr = impl->paths.find(group);
-            if (itr == impl->paths.end())
+            auto itr = priv->paths.find(group);
+            if (itr == priv->paths.end())
                 return keys;
 
             auto gPtr = dynamic_cast<AST::Group*>(itr->second.get());
@@ -161,16 +161,16 @@ namespace XdgUtils {
         }
 
         std::string DesktopEntry::get(const std::string& path, const std::string& fallback) {
-            auto itr = impl->paths.find(path);
-            if (itr == impl->paths.end())
+            auto itr = priv->paths.find(path);
+            if (itr == priv->paths.end())
                 return fallback;
 
             return itr->second->getValue();
         }
 
         void DesktopEntry::set(const std::string& path, const std::string& value) {
-            auto itr = impl->paths.find(path);
-            if (itr != impl->paths.end()) {
+            auto itr = priv->paths.find(path);
+            if (itr != priv->paths.end()) {
                 // Update node value
                 itr->second->setValue(value);
             } else {
@@ -181,21 +181,21 @@ namespace XdgUtils {
                     auto groupName = path.substr(0, splitIdx);
                     auto keyName = path.substr(splitIdx + 1, path.size() - splitIdx);
 
-                    auto groupItr = impl->paths.find(groupName);
+                    auto groupItr = priv->paths.find(groupName);
 
                     // create the group if it doesn't exists
-                    if (groupItr == impl->paths.end())
-                        impl->createGroup(groupName);
+                    if (groupItr == priv->paths.end())
+                        priv->createGroup(groupName);
 
-                    impl->createEntry(groupName, keyName, value);
+                    priv->createEntry(groupName, keyName, value);
 
                 } else
-                    impl->createGroup(path);
+                    priv->createGroup(path);
             }
         }
 
         bool DesktopEntry::exists(const std::string& path) {
-            return impl->paths.find(path) != impl->paths.end();
+            return priv->paths.find(path) != priv->paths.end();
         }
 
         void DesktopEntry::remove(const std::string& path) {
@@ -203,29 +203,34 @@ namespace XdgUtils {
                 auto splitIdx = path.rfind('/');
 
                 if (splitIdx != std::string::npos)
-                    impl->removeEntry(path);
+                    priv->removeEntry(path);
                 else
-                    impl->removeGroup(path);
+                    priv->removeGroup(path);
 
             }
         }
 
         std::ostream& operator<<(std::ostream& os, const DesktopEntry& entry) {
-            entry.impl->ast.write(os);
+            entry.priv->ast.write(os);
             return os;
         }
 
         std::istream& operator>>(std::istream& is, const DesktopEntry& entry) {
             try {
                 Reader::Reader reader;
-                entry.impl->ast = reader.read(is);
+                entry.priv->ast = reader.read(is);
 
-                entry.impl->updatePaths();
+                entry.priv->updatePaths();
             } catch (const Reader::MalformedEntry& err) {
                 throw ReadError(err.what());
             }
 
             return is;
+        }
+
+        DesktopEntry::DesktopEntry(const DesktopEntry& other) : priv (new Priv()){
+            priv->paths = other.priv->paths;
+            priv->ast = other.priv->ast;
         }
 
         DesktopEntry::~DesktopEntry() = default;

@@ -28,6 +28,17 @@ protected:
 };
 
 
+TEST_F(TestDesktopEntry, create) {
+    DesktopEntry::DesktopEntry a;
+    auto entryPath = "Desktop Entry/Name";
+    auto entryValue = "A";
+    a.set(entryPath, entryValue);
+
+    // Copy constructor
+    DesktopEntry::DesktopEntry b = a;
+    ASSERT_EQ(a.get(entryPath), b.get(entryPath));
+}
+
 TEST_F(TestDesktopEntry, readWrite) {
     DesktopEntry::DesktopEntry entry;
 
