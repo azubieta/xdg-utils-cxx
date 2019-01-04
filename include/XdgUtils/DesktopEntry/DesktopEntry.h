@@ -22,6 +22,10 @@ namespace XdgUtils {
         public:
             DesktopEntry();
 
+            explicit DesktopEntry(const std::string &data);
+
+            explicit DesktopEntry(std::istream& data);
+
             DesktopEntry(const DesktopEntry& other);
 
             virtual ~DesktopEntry();
@@ -78,6 +82,10 @@ namespace XdgUtils {
               */
             friend std::ostream& operator<<(std::ostream& os, const DesktopEntry& entry);
 
+
+            bool operator==(const DesktopEntry& rhs) const;
+
+            bool operator!=(const DesktopEntry& rhs) const;
 
         private:
             struct Priv;

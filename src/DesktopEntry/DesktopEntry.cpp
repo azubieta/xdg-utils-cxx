@@ -20,6 +20,17 @@ namespace XdgUtils {
             std::map<std::string, std::shared_ptr<AST::Node>> paths;
             typedef std::pair<std::string, std::shared_ptr<AST::Node>> path_entry_t;
 
+            void read(std::istream& in) {
+                try {
+                    Reader::Reader reader;
+                    ast = reader.read(in);
+
+                    updatePaths();
+                } catch (const Reader::MalformedEntry& err) {
+                    throw ReadError(err.what());
+                }
+            }
+
             /**
              * Recreate the paths mappings to the nodes inside the AST
              */
@@ -132,6 +143,24 @@ namespace XdgUtils {
 
         DesktopEntry::DesktopEntry() : priv(new Priv) {}
 
+        DesktopEntry::DesktopEntry(const std::string& data) : priv(new Priv) {
+            std::stringstream ss(data);
+            priv->read(ss);
+        }
+
+        DesktopEntry::DesktopEntry(std::istream& data) : priv(new Priv) {
+            priv->read(data);
+        }
+
+        DesktopEntry::DesktopEntry(const DesktopEntry& other) : priv(new Priv()) {
+            std::stringstream data;
+            data << other;
+
+            priv->read(data);
+        }
+
+        DesktopEntry::~DesktopEntry() = default;
+
         std::vector<std::string> DesktopEntry::listGroups() {
             std::vector<std::string> groups;
             for (const auto& node: priv->ast.getEntries())
@@ -216,24 +245,18 @@ namespace XdgUtils {
         }
 
         std::istream& operator>>(std::istream& is, const DesktopEntry& entry) {
-            try {
-                Reader::Reader reader;
-                entry.priv->ast = reader.read(is);
-
-                entry.priv->updatePaths();
-            } catch (const Reader::MalformedEntry& err) {
-                throw ReadError(err.what());
-            }
-
+            entry.priv->read(is);
             return is;
         }
 
-        DesktopEntry::DesktopEntry(const DesktopEntry& other) : priv (new Priv()){
-            priv->paths = other.priv->paths;
-            priv->ast = other.priv->ast;
+
+        bool DesktopEntry::operator==(const DesktopEntry& rhs) const {
+            return priv->ast == rhs.priv->ast;
         }
 
-        DesktopEntry::~DesktopEntry() = default;
+        bool DesktopEntry::operator!=(const DesktopEntry& rhs) const {
+            return !(rhs == *this);
+        }
     }
 
 }

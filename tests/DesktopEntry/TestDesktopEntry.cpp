@@ -37,6 +37,11 @@ TEST_F(TestDesktopEntry, create) {
     // Copy constructor
     DesktopEntry::DesktopEntry b = a;
     ASSERT_EQ(a.get(entryPath), b.get(entryPath));
+
+    ASSERT_EQ(a,b);
+
+    b.set(entryPath, "b");
+    ASSERT_NE(a,b);
 }
 
 TEST_F(TestDesktopEntry, readWrite) {
