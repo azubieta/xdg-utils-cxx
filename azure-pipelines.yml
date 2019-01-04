@@ -4,21 +4,21 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
 
 trigger:
-- master
+  - master
 
 pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
-- script: |
-    sudo apt-get -y install gcovr lcov
-- script: |
-    cmake . -DCMAKE_BUILD_TYPE=Debug -DXDG_UTILS_CODE_COVERAGE=On
-    make 
-  displayName: 'Build'
-- script: |
-    ctest -V
-  displayName: 'Test'
-- script: |
-    make code_coverage_report
-  displayName: 'Code Coverage Report'
+  - script: |
+      sudo apt-get -y install gcovr lcov
+  - script: |
+      cmake . -DCMAKE_BUILD_TYPE=Debug -DXDG_UTILS_CODE_COVERAGE=On -DXDG_UTILS_TESTS=On
+      make
+    displayName: 'Build'
+  - script: |
+      ctest -V
+    displayName: 'Test'
+  - script: |
+      make code_coverage_report
+    displayName: 'Code Coverage Report'

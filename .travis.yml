@@ -13,6 +13,6 @@ addons:
       - lcov
 
 script:
-  - cmake . -DCMAKE_BUILD_TYPE=Debug -DXDG_UTILS_CODE_COVERAGE=On
+  - cmake . -DCMAKE_BUILD_TYPE=Debug -DXDG_UTILS_TESTS=On -DXDG_UTILS_CODE_COVERAGE=On
   - make
   - ctest -V

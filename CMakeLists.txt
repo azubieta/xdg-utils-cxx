@@ -7,7 +7,7 @@ project(
 )
 
 ## Configuration options
-option(XDG_UTILS_TESTS "Build tests" ON)
+option(XDG_UTILS_TESTS "Build tests" OFF)
 option(XDG_UTILS_CODE_COVERAGE "Build Code Coverage report" OFF)
 
 ## Modules
