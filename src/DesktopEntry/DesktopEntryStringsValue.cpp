@@ -3,7 +3,7 @@
 #include <sstream>
 
 // local
-#include <DesktopEntry/DesktopEntryStringsValue.h>
+#include <XdgUtils/DesktopEntry/DesktopEntryStringsValue.h>
 
 namespace XdgUtils {
     namespace DesktopEntry {

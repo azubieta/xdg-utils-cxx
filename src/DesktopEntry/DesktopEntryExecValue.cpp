@@ -4,7 +4,7 @@
 
 
 // local
-#include <DesktopEntry/DesktopEntryExecValue.h>
+#include <XdgUtils/DesktopEntry/DesktopEntryExecValue.h>
 #include <set>
 
 namespace XdgUtils {

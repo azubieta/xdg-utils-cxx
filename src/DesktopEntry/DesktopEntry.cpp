@@ -4,7 +4,7 @@
 #include <map>
 
 // local
-#include <DesktopEntry/DesktopEntry.h>
+#include <XdgUtils/DesktopEntry/DesktopEntry.h>
 #include "AST/AST.h"
 
 #include "Reader/Tokenizer.h"

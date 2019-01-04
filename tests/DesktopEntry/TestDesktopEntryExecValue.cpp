@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 // local
-#include <DesktopEntry/DesktopEntryExecValue.h>
+#include <XdgUtils/DesktopEntry/DesktopEntryExecValue.h>
 
 using namespace XdgUtils::DesktopEntry;
 

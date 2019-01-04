@@ -14,7 +14,7 @@ add_library(
     $<TARGET_OBJECTS:XdgUtilsDesktopEntryReader>
 )
 
-set(PUBLIC_HEADERS_DIR "${XdgUtils_SOURCE_DIR}/include/XdgUtils")
+set(PUBLIC_HEADERS_DIR "${XdgUtils_SOURCE_DIR}/include")
 
 target_include_directories(
     ${PROJECT_NAME}

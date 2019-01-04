@@ -7,7 +7,7 @@
 #include <vector>
 
 // local
-#include <DesktopEntry/Exceptions.h>
+#include <XdgUtils/DesktopEntry/Exceptions.h>
 
 namespace XdgUtils {
     namespace DesktopEntry {

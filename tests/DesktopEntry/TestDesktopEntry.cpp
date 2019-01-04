@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <DesktopEntry/DesktopEntry.h>
+#include <XdgUtils/DesktopEntry/DesktopEntry.h>
 
 using namespace XdgUtils;
 
