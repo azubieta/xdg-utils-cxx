@@ -161,34 +161,6 @@ namespace XdgUtils {
 
         DesktopEntry::~DesktopEntry() = default;
 
-        std::vector<std::string> DesktopEntry::listGroups() {
-            std::vector<std::string> groups;
-            for (const auto& node: priv->ast.getEntries())
-                if (auto a = dynamic_cast<AST::Group*>(node.get()))
-                    groups.emplace_back(a->getValue());
-
-            return groups;
-        }
-
-        std::vector<std::string> DesktopEntry::listGroupKeys(const std::string& group) {
-            std::vector<std::string> keys;
-
-            // Find group
-            auto itr = priv->paths.find(group);
-            if (itr == priv->paths.end())
-                return keys;
-
-            auto gPtr = dynamic_cast<AST::Group*>(itr->second.get());
-
-            if (gPtr) {
-                for (const auto& node: gPtr->getEntries())
-                    if (auto a = dynamic_cast<AST::Entry*>(node.get()))
-                        keys.push_back(a->getKey());
-            }
-
-            return keys;
-        }
-
         std::string DesktopEntry::get(const std::string& path, const std::string& fallback) {
             auto itr = priv->paths.find(path);
             if (itr == priv->paths.end())
@@ -239,6 +211,14 @@ namespace XdgUtils {
             }
         }
 
+        std::vector<std::string> DesktopEntry::paths() {
+            std::vector<std::string> paths;
+            for (const auto& itr: priv->paths)
+                paths.emplace_back(itr.first);
+
+            return paths;
+        }
+
         std::ostream& operator<<(std::ostream& os, const DesktopEntry& entry) {
             entry.priv->ast.write(os);
             return os;
@@ -248,7 +228,6 @@ namespace XdgUtils {
             entry.priv->read(is);
             return is;
         }
-
 
         bool DesktopEntry::operator==(const DesktopEntry& rhs) const {
             return priv->ast == rhs.priv->ast;

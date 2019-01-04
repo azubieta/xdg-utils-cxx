@@ -56,28 +56,31 @@ TEST_F(TestDesktopEntry, readWrite) {
     ASSERT_EQ(in.str(), out.str());
 }
 
-TEST_F(TestDesktopEntry, listGroups) {
-    DesktopEntry::DesktopEntry entry;
+TEST_F(TestDesktopEntry, paths) {
+    DesktopEntry::DesktopEntry entry {
+        "[Desktop Entry]\n"
+        "Version=1.0\n"
+        "Type=Application\n"
+        "Name=Foo Viewer\n"
+        "Comment=The best viewer for Foo objects available!\n"
+        "TryExec=fooview\n"
+        "Exec=fooview %F\n"
+        "Icon=fooview\n"
+    };
 
-    std::stringstream in(exampleDesktopEntry);
-    in >> entry;
+    std::vector<std::string> paths = entry.paths();
+    std::vector<std::string> expectedPaths = {
+        "Desktop Entry",
+        "Desktop Entry/Comment",
+        "Desktop Entry/Exec",
+        "Desktop Entry/Icon",
+        "Desktop Entry/Name",
+        "Desktop Entry/TryExec",
+        "Desktop Entry/Type",
+        "Desktop Entry/Version",
+    };
 
-    std::vector<std::string> expected = {"Desktop Entry", "Desktop Action Gallery", "Desktop Action Create"};
-    std::vector<std::string> result = entry.listGroups();
-
-    ASSERT_EQ(result, expected);
-}
-
-TEST_F(TestDesktopEntry, listGroupKeys) {
-    DesktopEntry::DesktopEntry entry;
-
-    std::stringstream in(exampleDesktopEntry);
-    in >> entry;
-
-    std::vector<std::string> expected = {"Exec", "Name"};
-    std::vector<std::string> result = entry.listGroupKeys("Desktop Action Gallery");
-
-    ASSERT_EQ(result, expected);
+    ASSERT_EQ(paths, expectedPaths);
 }
 
 TEST_F(TestDesktopEntry, get) {

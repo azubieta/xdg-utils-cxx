@@ -47,17 +47,6 @@ namespace XdgUtils {
             std::string get(const std::string& path, const std::string& fallback = "");
 
             /**
-             * @return names of the existent groups
-             */
-            std::vector<std::string> listGroups();
-
-            /**
-             * @param group
-             * @return names of the existent keys that belongs to <group>
-             */
-            std::vector<std::string> listGroupKeys(const std::string& group);
-
-            /**
              * @param path
              * @return true if there is an entry at <path>, false otherwise
              */
@@ -68,6 +57,11 @@ namespace XdgUtils {
              * @param path
              */
             void remove(const std::string& path);
+
+            /**
+             * @return Paths to all available entries and groups
+             */
+            std::vector<std::string> paths();
 
             /**
              * Attempts to read the <is> stream as a Desktop Entry. Any existent data will be replaced.
