@@ -22,7 +22,7 @@ namespace XdgUtils {
         public:
             DesktopEntry();
 
-            explicit DesktopEntry(const std::string &data);
+            explicit DesktopEntry(const std::string& data);
 
             explicit DesktopEntry(std::istream& data);
 
@@ -44,13 +44,13 @@ namespace XdgUtils {
              * @param fallback
              * @return entry value or <fallback> if the entry doesn't exist
              */
-            std::string get(const std::string& path, const std::string& fallback = "");
+            std::string get(const std::string& path, const std::string& fallback = "") const;
 
             /**
              * @param path
              * @return true if there is an entry at <path>, false otherwise
              */
-            bool exists(const std::string& path);
+            bool exists(const std::string& path) const;
 
             /**
              * Remove entry or group referenced by <path>
@@ -61,7 +61,7 @@ namespace XdgUtils {
             /**
              * @return Paths to all available entries and groups
              */
-            std::vector<std::string> paths();
+            std::vector<std::string> paths() const;
 
             /**
              * Attempts to read the <is> stream as a Desktop Entry. Any existent data will be replaced.

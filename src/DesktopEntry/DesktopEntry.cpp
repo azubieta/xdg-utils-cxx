@@ -161,7 +161,7 @@ namespace XdgUtils {
 
         DesktopEntry::~DesktopEntry() = default;
 
-        std::string DesktopEntry::get(const std::string& path, const std::string& fallback) {
+        std::string DesktopEntry::get(const std::string& path, const std::string& fallback) const {
             auto itr = priv->paths.find(path);
             if (itr == priv->paths.end())
                 return fallback;
@@ -195,7 +195,7 @@ namespace XdgUtils {
             }
         }
 
-        bool DesktopEntry::exists(const std::string& path) {
+        bool DesktopEntry::exists(const std::string& path) const {
             return priv->paths.find(path) != priv->paths.end();
         }
 
@@ -211,7 +211,7 @@ namespace XdgUtils {
             }
         }
 
-        std::vector<std::string> DesktopEntry::paths() {
+        std::vector<std::string> DesktopEntry::paths() const {
             std::vector<std::string> paths;
             for (const auto& itr: priv->paths)
                 paths.emplace_back(itr.first);
