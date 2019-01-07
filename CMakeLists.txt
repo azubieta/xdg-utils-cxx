@@ -12,6 +12,7 @@ option(XDG_UTILS_CODE_COVERAGE "Build Code Coverage report" OFF)
 
 ## Modules
 option(XDG_UTILS_DESKTOP_ENTRY "Build Desktop Entry" ON)
+option(XDG_UTILS_BASE_DIR "Build Base Directory" ON)
 
 # Instalation paths
 set(XDG_UTILS_BIN_DIR bin CACHE PATH "Binaries install directory")

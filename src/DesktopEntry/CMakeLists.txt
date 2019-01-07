@@ -26,7 +26,7 @@ target_include_directories(
 
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
-    PUBLIC_HEADER "${PUBLIC_HEADERS_DIR}/DesktopEntry/DesktopEntry.h;${PUBLIC_HEADERS_DIR}/DesktopEntry/Exceptions.h;"
+    PUBLIC_HEADER "${PUBLIC_HEADERS_DIR}/XdgUtils/DesktopEntry/DesktopEntry.h;${PUBLIC_HEADERS_DIR}/XdgUtils/DesktopEntry/Exceptions.h;"
 )
 
 add_library(XdgUtils::DesktopEntry ALIAS ${PROJECT_NAME})
