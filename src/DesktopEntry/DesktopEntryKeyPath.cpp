@@ -16,11 +16,7 @@ namespace XdgUtils {
                 parse(path);
             }
 
-            Priv& operator=(const Priv& other) {
-                group = other.group;
-                key = other.key;
-                locale = other.locale;
-            }
+            Priv& operator=(const Priv& other) = default;
 
             bool operator==(const Priv& rhs) const {
                 return group == rhs.group &&
