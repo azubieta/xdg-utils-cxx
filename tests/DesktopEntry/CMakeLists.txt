@@ -6,6 +6,7 @@ add_executable(
     TestDesktopEntry.cpp
     TestDesktopEntryStringsValue.cpp
     TestDesktopEntryExecValue.cpp
+    TestDesktopEntryKeyPath.cpp
 )
 
 target_include_directories(TestXdgUtilsDesktopEntry PRIVATE "${PROJECT_SOURCE_DIR}/src/desktop_entry")

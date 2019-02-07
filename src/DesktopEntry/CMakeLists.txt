@@ -9,6 +9,7 @@ add_library(
     DesktopEntry.cpp
     DesktopEntryExecValue.cpp
     DesktopEntryStringsValue.cpp
+    DesktopEntryKeyPath.cpp
 
     $<TARGET_OBJECTS:XdgUtilsDesktopEntryAST>
     $<TARGET_OBJECTS:XdgUtilsDesktopEntryReader>
