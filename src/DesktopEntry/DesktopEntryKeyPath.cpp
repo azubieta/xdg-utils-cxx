@@ -54,7 +54,7 @@ namespace XdgUtils {
                 ++itr;
                 auto keyBegin = itr;
                 while (*itr != '\0' && *itr != '[') {
-                    if (!std::isalnum(*itr))
+                    if (!std::isalnum(*itr) && *itr != '-' && *itr != '_' )
                         throw ParseError(std::string("Unexpected char in path key section: ") + *itr);
 
                     ++itr;
@@ -114,7 +114,7 @@ namespace XdgUtils {
 
         void DesktopEntryKeyPath::setKey(const std::string& key) {
             for (const auto& c: key)
-                if (!std::isalnum(c))
+                if (!std::isalnum(c) && c != '-' && c != '_')
                     throw MalformedPathError("Unexpected char in key name");
 
             priv->key = key;

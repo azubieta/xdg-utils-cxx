@@ -18,10 +18,16 @@ TEST(TestDesktopEntryKeyPath, string) {
 
     path.setKey("k");
     ASSERT_EQ(path, "g/k");
+
+    path.setKey("k_k");
+    ASSERT_EQ(path, "g/k_k");
+
+    path.setKey("k-k");
+    ASSERT_EQ(path, "g/k-k");
     ASSERT_THROW(path.setKey("@!@#$"), MalformedPathError);
 
     path.setLocale("l");
-    ASSERT_EQ(path, "g/k[l]");
+    ASSERT_EQ(path, "g/k-k[l]");
 }
 
 TEST(TestDesktopEntryKeyPath, parseGroup) {
@@ -33,6 +39,8 @@ TEST(TestDesktopEntryKeyPath, parseGroup) {
 
 TEST(TestDesktopEntryKeyPath, parseKey) {
     ASSERT_EQ(DesktopEntryKeyPath("G/K"), "G/K");
+    ASSERT_EQ(DesktopEntryKeyPath("G/K-K"), "G/K-K");
+    ASSERT_EQ(DesktopEntryKeyPath("G/K_K"), "G/K_K");
     ASSERT_THROW(DesktopEntryKeyPath("Invalid/Key]"), ParseError);
     ASSERT_THROW(DesktopEntryKeyPath("Invalid/Key#"), ParseError);
     ASSERT_THROW(DesktopEntryKeyPath("Invalid/#"), ParseError);
