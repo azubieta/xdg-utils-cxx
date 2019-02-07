@@ -10,7 +10,7 @@ endif()
 
 if(XDG_UTILS_CODE_COVERAGE)
     set(COVERAGE_LCOV_EXCLUDES '${PROJECT_SOURCE_DIR}/tests/*' '${PROJECT_SOURCE_DIR}/*build*' '/usr/*')
-    setup_target_for_coverage_lcov(
+    SETUP_TARGET_FOR_COVERAGE_GCOVR_XML(
         NAME code_coverage_report
         EXECUTABLE ctest -V -j ${PROCESSOR_COUNT}
     )

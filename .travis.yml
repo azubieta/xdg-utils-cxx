@@ -1,6 +1,7 @@
 os: linux
 language: cpp
 compiler: gcc
+sudo: required
 
 notifications:
   email: false
@@ -12,7 +13,12 @@ addons:
       - gcovr
       - lcov
 
+install:
+  - git clone https://github.com/azubieta/python-codacy-coverage.git
+  - pushd python-codacy-coverage; sudo python setup.py install; popd;
 script:
   - cmake . -DCMAKE_BUILD_TYPE=Debug -DXDG_UTILS_TESTS=On -DXDG_UTILS_CODE_COVERAGE=On
   - make
   - ctest -V
+  - make code_coverage_report
+  - python-codacy-coverage -vr code_coverage_report.xml -l cpp

@@ -1,6 +1,7 @@
 # Xdg Utils C++ 
 [![Build Status](https://travis-ci.org/azubieta/xdg-utils.svg?branch=master)](https://travis-ci.org/azubieta/xdg-utils)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9e34fda85c3d46ab83b44071d145a917)](https://www.codacy.com/app/azubieta/xdg-utils?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=azubieta/xdg-utils&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/9e34fda85c3d46ab83b44071d145a917)](https://www.codacy.com/app/azubieta/xdg-utils?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=azubieta/xdg-utils&amp;utm_campaign=Badge_Coverage)
 
 Implementation of the Free Desktop Standards in C++. 
 
