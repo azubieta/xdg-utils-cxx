@@ -45,7 +45,7 @@ namespace XdgUtils {
             void Group::setEntries(const std::vector<std::shared_ptr<Node>>& entries) {
                 this->entries.clear();
                 for (const auto& entry: entries)
-                    this->entries.emplace_back(entry);
+                    this->entries.emplace_back(entry->clone());
             }
 
             bool Group::operator==(const Group& rhs) const {
