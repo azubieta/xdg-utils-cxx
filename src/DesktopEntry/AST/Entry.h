@@ -29,6 +29,8 @@ namespace XdgUtils {
 
                 void write(std::ostream& output) const override;
 
+                Node* clone() const override;
+
                 /**
                  * Compare two Entries according to they fields values. Raw values will be ignored
                  * @param rhs

@@ -43,7 +43,9 @@ namespace XdgUtils {
             }
 
             void Group::setEntries(const std::vector<std::shared_ptr<Node>>& entries) {
-                Group::entries = entries;
+                this->entries.clear();
+                for (const auto& entry: entries)
+                    this->entries.emplace_back(entry);
             }
 
             bool Group::operator==(const Group& rhs) const {
@@ -54,9 +56,9 @@ namespace XdgUtils {
                 auto bItr = rhs.entries.begin();
 
                 while (aItr != entries.end() && bItr != rhs.entries.end()) {
-                    if (auto a = dynamic_cast<Entry*>((*aItr).get())) {
+                    if (auto a = dynamic_cast<Entry*>(aItr->get())) {
                         // if the first one is an Entry the second one must also be
-                        if (auto b = dynamic_cast<Entry*>((*bItr).get())) {
+                        if (auto b = dynamic_cast<Entry*>(bItr->get())) {
                             // if both are entries compare them as such
                             if (*a != *b)
                                 return false;
@@ -64,9 +66,9 @@ namespace XdgUtils {
                             return false;
                     }
 
-                    if (auto a = dynamic_cast<Comment*>((*aItr).get())) {
+                    if (auto a = dynamic_cast<Comment*>(aItr->get())) {
                         // if the first one is an Comment the second one must also be
-                        if (auto b = dynamic_cast<Comment*>((*bItr).get())) {
+                        if (auto b = dynamic_cast<Comment*>(bItr->get())) {
                             // if both are comments compare them as such
                             if (*a != *b)
                                 return false;
@@ -89,6 +91,41 @@ namespace XdgUtils {
                 group.write(os);
                 return os;
             }
+
+            Node* Group::clone() const {
+                return new Group(*this);
+            }
+
+            Group::Group(const Group& other) {
+                headerValue = other.headerValue;
+                headerRawValue = other.headerRawValue;
+
+                setEntries(other.entries);
+            }
+
+            Group& Group::operator=(const Group& other) {
+                headerValue = other.headerValue;
+                headerRawValue = other.headerRawValue;
+
+                setEntries(other.entries);
+                return *this;
+            }
+
+            Group::Group(Group&& other) noexcept {
+                headerValue = std::move(other.headerValue);
+                headerRawValue = std::move(other.headerRawValue);
+                entries = std::move(other.entries);
+            }
+
+            Group& Group::operator=(Group&& other) noexcept {
+                headerValue = std::move(other.headerValue);
+                headerRawValue = std::move(other.headerRawValue);
+                entries = std::move(other.entries);
+
+                return *this;
+            }
+
+            Group::~Group() = default;
         }
     }
 }

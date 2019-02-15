@@ -51,6 +51,10 @@ namespace XdgUtils {
                 entry.write(os);
                 return os;
             }
+
+            Node* Entry::clone() const {
+                return new Entry(*this);
+            }
         }
     }
 }

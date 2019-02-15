@@ -20,6 +20,8 @@ namespace XdgUtils {
 
                 void write(std::ostream& output) const override;
 
+                Node* clone() const override;
+
                 bool operator==(const Comment& rhs) const;
 
                 bool operator!=(const Comment& rhs) const;

@@ -64,6 +64,31 @@ namespace XdgUtils {
                         output << std::endl;
                 }
             }
+
+            AST::AST(const AST& other) {
+                entries.clear();
+                for (const auto& entry: other.entries)
+                    entries.emplace_back(entry->clone());
+            }
+
+            AST& AST::operator=(const AST& other) {
+                entries.clear();
+                for (const auto& entry: other.entries)
+                    entries.emplace_back(entry->clone());
+
+                return *this;
+            }
+
+            AST::AST(AST&& other) noexcept {
+                entries = std::move(other.entries);
+            }
+
+            AST& AST::operator=(AST&& other) noexcept {
+                entries = std::move(other.entries);
+                return *this;
+            }
+
+            AST::AST() = default;
         }
     }
 }
