@@ -73,3 +73,15 @@ TEST(TestGroup, copy) {
 
     ASSERT_NE(g1, g2);
 }
+
+TEST(TestGroup, move) {
+    Group g1("[Desktop Entry]", "Desktop Entry");;
+
+    std::vector<std::shared_ptr<Node>> entries1;
+    entries1.emplace_back(new Entry(" Name", "Name", "", "", "=My App", "My App"));
+    entries1.emplace_back(new Comment("# Test", " Test"));
+    g1.setEntries(entries1);
+
+    Group g2 = std::move(g1);
+    ASSERT_NE(g2.getEntries(), entries1);
+}
