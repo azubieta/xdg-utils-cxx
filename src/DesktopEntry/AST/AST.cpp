@@ -11,7 +11,9 @@ namespace XdgUtils {
             }
 
             void AST::setEntries(const std::vector<std::shared_ptr<Node>>& entries) {
-                AST::entries = entries;
+                this->entries.clear();
+                for (const auto& entry: entries)
+                    this->entries.emplace_back(entry->clone());
             }
 
             bool AST::operator==(const AST& rhs) const {
@@ -66,16 +68,11 @@ namespace XdgUtils {
             }
 
             AST::AST(const AST& other) {
-                entries.clear();
-                for (const auto& entry: other.entries)
-                    entries.emplace_back(entry->clone());
+                setEntries(other.entries);
             }
 
             AST& AST::operator=(const AST& other) {
-                entries.clear();
-                for (const auto& entry: other.entries)
-                    entries.emplace_back(entry->clone());
-
+                setEntries(other.entries);
                 return *this;
             }
 
