@@ -5,6 +5,7 @@
 
 // local
 #include <XdgUtils/DesktopEntry/DesktopEntry.h>
+#include <XdgUtils/DesktopEntry/DesktopEntryKeyPath.h>
 #include "AST/AST.h"
 
 #include "Reader/Tokenizer.h"
@@ -38,13 +39,13 @@ namespace XdgUtils {
                 paths.clear();
 
                 for (const auto& astEntry: ast.getEntries()) {
-                    if (auto group = dynamic_cast<AST::Group*>(astEntry.get())) {
+                    if (auto group = std::dynamic_pointer_cast<AST::Group>(astEntry)) {
                         paths[group->getValue()] = astEntry;
 
                         for (const auto& groupEntry: group->getEntries()) {
-                            if (auto entry = dynamic_cast<AST::Entry*>(groupEntry.get())) {
-                                auto path = createEntryPath(group->getValue(), *entry);
-                                paths[path] = groupEntry;
+                            if (auto entry = std::dynamic_pointer_cast<AST::Entry>(groupEntry)) {
+                                DesktopEntryKeyPath path(group->getValue(), entry->getKey(), entry->getLocale());
+                                paths[path.string()] = groupEntry;
                             }
                         }
                     }
@@ -52,38 +53,26 @@ namespace XdgUtils {
             }
 
             void createGroup(const std::string& name) {
-                std::shared_ptr<AST::Group> g(new AST::Group("[" + name + "]", name));
+                auto group = std::make_shared<AST::Group>("[" + name + "]", name);
 
                 // update entries
-                auto entries = ast.getEntries();
-
-                entries.emplace_back(g);
-
-                ast.setEntries(entries);
+                auto& entries = ast.getEntries();
+                entries.emplace_back(group);
 
                 // update path
-                paths[name] = g;
+                paths[name] = group;
             }
 
-            void createEntry(const std::string& groupName, const std::string& keypath, const std::string& value) {
-                std::stringstream keystr;
-                keystr << keypath << "=" << value;
-
-                Reader::Tokenizer tokenizer(keystr);
-                tokenizer.consume();
-                Reader::Reader reader;
-                std::shared_ptr<AST::Entry> entry(reader.readEntry(tokenizer));
-
-                auto group = dynamic_cast<AST::Group*>(paths[groupName].get());
+            void createEntry(const DesktopEntryKeyPath& keyPath, const std::string& value) {
+                auto group = std::dynamic_pointer_cast<AST::Group>(paths[keyPath.group()]);
 
                 // append entry to group
-                auto entries = group->getEntries();
+                auto entry = std::make_shared<AST::Entry>(keyPath.key(), keyPath.locale(), value);
+                std::vector<std::shared_ptr<AST::Node>>& entries = group->getEntries();
                 entries.emplace_back(entry);
-                group->setEntries(entries);
 
                 // update paths
-                auto path = createEntryPath(groupName, *entry);
-                paths[path] = entry;
+                paths[keyPath.string()] = entry;
             }
 
             std::string createEntryPath(const std::string& groupName, const AST::Entry& entry) {
@@ -126,7 +115,7 @@ namespace XdgUtils {
                     auto groupNode = paths[groupName];
                     auto entryNode = paths[path];
 
-                    AST::Group* g = dynamic_cast<AST::Group*>(groupNode.get());
+                    auto g = dynamic_cast<AST::Group*>(groupNode.get());
                     // remove item from the AST
                     auto groupEntries = g->getEntries();
 
@@ -153,10 +142,8 @@ namespace XdgUtils {
         }
 
         DesktopEntry::DesktopEntry(const DesktopEntry& other) : priv(new Priv()) {
-            std::stringstream data;
-            data << other;
-
-            priv->read(data);
+            priv->ast = other.priv->ast;
+            priv->updatePaths();
         }
 
         DesktopEntry::~DesktopEntry() = default;
@@ -176,22 +163,14 @@ namespace XdgUtils {
                 itr->second->setValue(value);
             } else {
                 // Find path split
-                auto splitIdx = path.rfind('/');
+                DesktopEntryKeyPath keyPath(path);
 
-                if (splitIdx != std::string::npos) {
-                    auto groupName = path.substr(0, splitIdx);
-                    auto keyName = path.substr(splitIdx + 1, path.size() - splitIdx);
+                // create the group if it doesn't exists
+                if (priv->paths.find(keyPath.group()) == priv->paths.end())
+                    priv->createGroup(keyPath.group());
 
-                    auto groupItr = priv->paths.find(groupName);
-
-                    // create the group if it doesn't exists
-                    if (groupItr == priv->paths.end())
-                        priv->createGroup(groupName);
-
-                    priv->createEntry(groupName, keyName, value);
-
-                } else
-                    priv->createGroup(path);
+                if (!keyPath.key().empty())
+                    priv->createEntry(keyPath, value);
             }
         }
 

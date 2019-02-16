@@ -7,6 +7,7 @@
 
 namespace XdgUtils {
     namespace DesktopEntry {
+
         struct DesktopEntryKeyPath::Priv {
             std::string group;
             std::string key;
@@ -15,6 +16,9 @@ namespace XdgUtils {
             explicit Priv(const std::string& path) {
                 parse(path);
             }
+
+            Priv(std::string group, std::string key, std::string locale) : group(std::move(group)), key(std::move(key)),
+                                                                           locale(std::move(locale)) {}
 
             Priv& operator=(const Priv& other) = default;
 
@@ -54,7 +58,7 @@ namespace XdgUtils {
                 ++itr;
                 auto keyBegin = itr;
                 while (*itr != '\0' && *itr != '[') {
-                    if (!std::isalnum(*itr) && *itr != '-' && *itr != '_' )
+                    if (!std::isalnum(*itr) && *itr != '-' && *itr != '_')
                         throw ParseError(std::string("Unexpected char in path key section: ") + *itr);
 
                     ++itr;
@@ -96,6 +100,12 @@ namespace XdgUtils {
         };
 
         DesktopEntryKeyPath::DesktopEntryKeyPath(const std::string& path) : priv(new Priv(path)) {}
+
+
+        DesktopEntryKeyPath::DesktopEntryKeyPath(const std::string& group, const std::string& key,
+                                                 const std::string& locale) : priv(new Priv(group, key, locale)) {
+
+        }
 
         std::string DesktopEntryKeyPath::group() const {
             return priv->group;
@@ -165,6 +175,10 @@ namespace XdgUtils {
         std::ostream& operator<<(std::ostream& os, const DesktopEntryKeyPath& path) {
             os << path.string();
             return os;
+        }
+
+        std::string DesktopEntryKeyPath::fullKey() const {
+            return priv->key + '[' + priv->locale + ']';
         }
 
         DesktopEntryKeyPath::~DesktopEntryKeyPath() = default;

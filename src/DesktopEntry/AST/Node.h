@@ -20,8 +20,14 @@ namespace XdgUtils {
                     return os;
                 }
 
+
+                bool operator==(const Node& rhs) const;
+
+                bool operator!=(const Node& rhs) const;
+
                 virtual ~Node() = default;
             };
+
         }
     }
 }

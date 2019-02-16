@@ -4,4 +4,4 @@ add_library(
     Group.cpp
     Entry.cpp
     Comment.cpp
-)
+    Node.cpp)

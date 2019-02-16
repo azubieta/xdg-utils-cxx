@@ -17,7 +17,9 @@ TEST(TestGroup, create) {
 
     g1.setEntries(entries1);
 
-    ASSERT_EQ(g1.getEntries(), entries1);
+    auto res = g1.getEntries();
+    for (int i = 0; i < entries1.size(); ++i)
+        ASSERT_EQ(*res[i], *entries1[i]);
 }
 
 TEST(TestGroup, compare) {
