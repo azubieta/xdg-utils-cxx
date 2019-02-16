@@ -84,10 +84,7 @@ namespace XdgUtils {
                 return new Group(*this);
             }
 
-            Group::Group(const Group& other) {
-                headerValue = other.headerValue;
-                headerRawValue = other.headerRawValue;
-
+            Group::Group(const Group& other) : headerValue(other.headerValue), headerRawValue(other.headerRawValue) {
                 setEntries(other.entries);
             }
 
