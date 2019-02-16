@@ -17,8 +17,8 @@ namespace XdgUtils {
                 parse(path);
             }
 
-            Priv(std::string group, std::string key, std::string locale) : group(std::move(group)), key(std::move(key)),
-                                                                           locale(std::move(locale)) {}
+            Priv(const std::string& group, const std::string& key, const std::string& locale) :
+                group(group), key(key), locale(locale) {}
 
             Priv& operator=(const Priv& other) = default;
 
