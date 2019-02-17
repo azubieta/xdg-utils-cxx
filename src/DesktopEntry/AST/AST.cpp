@@ -6,12 +6,18 @@ namespace XdgUtils {
     namespace DesktopEntry {
         namespace AST {
 
+            std::vector<std::shared_ptr<Node>>& AST::getEntries() {
+                return entries;
+            }
+
             const std::vector<std::shared_ptr<Node>>& AST::getEntries() const {
                 return entries;
             }
 
             void AST::setEntries(const std::vector<std::shared_ptr<Node>>& entries) {
-                AST::entries = entries;
+                this->entries.clear();
+                for (const auto& entry: entries)
+                    this->entries.emplace_back(entry->clone());
             }
 
             bool AST::operator==(const AST& rhs) const {
@@ -19,25 +25,8 @@ namespace XdgUtils {
                 auto bItr = rhs.entries.begin();
 
                 while (aItr != entries.end() && bItr != rhs.entries.end()) {
-                    if (auto a = dynamic_cast<Group*>((*aItr).get())) {
-                        // if the first one is an Entry the second one must also be
-                        if (auto b = dynamic_cast<Group*>((*bItr).get())) {
-                            // if both are entries compare them as such
-                            if (*a != *b)
-                                return false;
-                        } else
-                            return false;
-                    }
-
-                    if (auto a = dynamic_cast<Comment*>((*aItr).get())) {
-                        // if the first one is an Comment the second one must also be
-                        if (auto b = dynamic_cast<Comment*>((*bItr).get())) {
-                            // if both are comments compare them as such
-                            if (*a != *b)
-                                return false;
-                        } else
-                            return false;
-                    }
+                    if (*aItr->get() != *bItr->get())
+                        return false;
 
                     ++aItr, ++bItr;
                 }
@@ -64,6 +53,26 @@ namespace XdgUtils {
                         output << std::endl;
                 }
             }
+
+            AST::AST(const AST& other) {
+                setEntries(other.entries);
+            }
+
+            AST& AST::operator=(const AST& other) {
+                setEntries(other.entries);
+                return *this;
+            }
+
+            AST::AST(AST&& other) noexcept {
+                entries = std::move(other.entries);
+            }
+
+            AST& AST::operator=(AST&& other) noexcept {
+                entries = std::move(other.entries);
+                return *this;
+            }
+
+            AST::AST() = default;
         }
     }
 }

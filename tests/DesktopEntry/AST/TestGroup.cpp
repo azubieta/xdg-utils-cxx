@@ -17,7 +17,9 @@ TEST(TestGroup, create) {
 
     g1.setEntries(entries1);
 
-    ASSERT_EQ(g1.getEntries(), entries1);
+    auto res = g1.getEntries();
+    for (int i = 0; i < entries1.size(); ++i)
+        ASSERT_EQ(*res[i], *entries1[i]);
 }
 
 TEST(TestGroup, compare) {
@@ -55,4 +57,33 @@ TEST(TestGroup, write) {
     g1.write(res);
 
     ASSERT_EQ(res.str(), "[Desktop Entry]\n Name=My App\n# Test");
+}
+
+TEST(TestGroup, copy) {
+    Group g1("[Desktop Entry]", "Desktop Entry");;
+
+    std::vector<std::shared_ptr<Node>> entries1;
+    entries1.emplace_back(new Entry(" Name", "Name", "", "", "=My App", "My App"));
+    entries1.emplace_back(new Comment("# Test", " Test"));
+    g1.setEntries(entries1);
+
+    Group g2 = g1;
+    ASSERT_EQ(g1, g2);
+
+    // Assert each group has a different copy of the entries
+    g1.getEntries().front()->setValue("Your App");
+
+    ASSERT_NE(g1, g2);
+}
+
+TEST(TestGroup, move) {
+    Group g1("[Desktop Entry]", "Desktop Entry");;
+
+    std::vector<std::shared_ptr<Node>> entries1;
+    entries1.emplace_back(new Entry(" Name", "Name", "", "", "=My App", "My App"));
+    entries1.emplace_back(new Comment("# Test", " Test"));
+    g1.setEntries(entries1);
+
+    Group g2 = std::move(g1);
+    ASSERT_NE(g2.getEntries(), entries1);
 }

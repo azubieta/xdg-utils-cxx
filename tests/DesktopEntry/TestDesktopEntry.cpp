@@ -38,10 +38,10 @@ TEST_F(TestDesktopEntry, create) {
     DesktopEntry::DesktopEntry b = a;
     ASSERT_EQ(a.get(entryPath), b.get(entryPath));
 
-    ASSERT_EQ(a,b);
+    ASSERT_EQ(a, b);
 
     b.set(entryPath, "b");
-    ASSERT_NE(a,b);
+    ASSERT_NE(a, b);
 }
 
 TEST_F(TestDesktopEntry, readWrite) {
@@ -57,7 +57,7 @@ TEST_F(TestDesktopEntry, readWrite) {
 }
 
 TEST_F(TestDesktopEntry, paths) {
-    DesktopEntry::DesktopEntry entry {
+    DesktopEntry::DesktopEntry entry{
         "[Desktop Entry]\n"
         "Version=1.0\n"
         "Type=Application\n"
@@ -115,6 +115,17 @@ TEST_F(TestDesktopEntry, get) {
 }
 
 TEST_F(TestDesktopEntry, set) {
+    DesktopEntry::DesktopEntry entry;
+    entry.set("A/B", "C");
+
+    std::stringstream out;
+    out << entry;
+
+    std::string expected = "[A]\nB=C";
+    ASSERT_EQ(out.str(), expected);
+}
+
+TEST_F(TestDesktopEntry, edit) {
     DesktopEntry::DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);

@@ -13,11 +13,21 @@ namespace XdgUtils {
 
                 virtual void write(std::ostream& output) const = 0;
 
+                virtual Node* clone() const = 0;
+
                 friend std::ostream& operator<<(std::ostream& os, const Node& node) {
                     node.write(os);
                     return os;
                 }
+
+
+                bool operator==(const Node& rhs) const;
+
+                bool operator!=(const Node& rhs) const;
+
+                virtual ~Node() = default;
             };
+
         }
     }
 }

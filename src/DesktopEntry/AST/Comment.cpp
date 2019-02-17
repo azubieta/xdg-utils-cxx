@@ -41,6 +41,10 @@ namespace XdgUtils {
                 comment.write(os);
                 return os;
             }
+
+            Node* Comment::clone() const {
+                return new Comment(*this);
+            }
         }
     }
 }

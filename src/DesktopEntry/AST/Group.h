@@ -22,6 +22,20 @@ namespace XdgUtils {
                  */
                 Group(const std::string& headerRawValue, const std::string& headerValue);
 
+                // Copy constructor
+                Group(const Group& other);
+
+                // Copy assigment
+                Group& operator=(const Group& other);
+
+                // Move constructor
+                Group(Group&& other) noexcept;
+
+                // Move assigment
+                Group& operator=(Group&& other) noexcept;
+
+                ~Group() override;
+
                 std::string getValue() const override;
 
                 /**
@@ -31,6 +45,10 @@ namespace XdgUtils {
                 void setValue(const std::string& newValue) override;
 
                 void write(std::ostream& output) const override;
+
+                Node* clone() const override;
+
+                std::vector<std::shared_ptr<Node>>& getEntries();
 
                 const std::vector<std::shared_ptr<Node>>& getEntries() const;
 

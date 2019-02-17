@@ -106,3 +106,59 @@ TEST(TestAST, write) {
               " Name=My App\n"
               "# Test");
 }
+
+
+TEST(TestAST, copy) {
+    AST ast1;
+
+    auto g1 = new Group("[Desktop Entry]", "Desktop Entry");;
+    std::vector<std::shared_ptr<Node>> g1Entries = {
+        std::shared_ptr<Node>(new Entry(" Name", "Name", "", "", "=My App", "My App")),
+        std::shared_ptr<Node>(new Comment("# Test", " Test"))
+    };
+
+    g1->setEntries(g1Entries);
+
+    std::vector<std::shared_ptr<Node>> ast1Entries = {
+        std::shared_ptr<Node>(new Comment("# Test", " Test")),
+        std::shared_ptr<Node>(g1)
+    };
+
+    ast1.setEntries(ast1Entries);;
+
+    AST ast2 = ast1;
+    ASSERT_EQ(ast1, ast2);
+
+    ast1.getEntries().front()->setValue("Desktop Action One");
+    ASSERT_NE(ast1, ast2);
+}
+
+
+TEST(TestAST, move) {
+    AST ast1;
+
+    auto g1 = new Group("[Desktop Entry]", "Desktop Entry");;
+    std::vector<std::shared_ptr<Node>> g1Entries = {
+        std::shared_ptr<Node>(new Entry(" Name", "Name", "", "", "=My App", "My App")),
+        std::shared_ptr<Node>(new Comment("# Test", " Test"))
+    };
+
+    g1->setEntries(g1Entries);
+
+    std::vector<std::shared_ptr<Node>> ast1Entries = {
+        std::shared_ptr<Node>(new Comment("# Test", " Test")),
+        std::shared_ptr<Node>(g1)
+    };
+
+    ast1.setEntries(ast1Entries);;
+
+    std::stringstream stream1;
+    stream1 << ast1;
+
+    AST ast2 = std::move(ast1);
+    std::stringstream stream2;
+    stream2 << ast2;
+
+    ASSERT_EQ(stream1.str(), stream2.str());
+}
+

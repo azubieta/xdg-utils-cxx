@@ -20,6 +20,8 @@ namespace XdgUtils {
         public:
             explicit DesktopEntryKeyPath(const std::string& path);
 
+            DesktopEntryKeyPath(const std::string& group, const std::string& key, const std::string& locale);
+
             DesktopEntryKeyPath(const DesktopEntryKeyPath& other);
 
             DesktopEntryKeyPath& operator=(const DesktopEntryKeyPath& other);
@@ -70,6 +72,11 @@ namespace XdgUtils {
              * @param locale
              */
             void setLocale(const std::string& locale);
+
+            /**
+             * @return key and locale sections
+             */
+            std::string fullKey() const;
 
             /**
              * @return string representation of the KeyPath

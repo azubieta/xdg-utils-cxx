@@ -16,6 +16,8 @@ namespace XdgUtils {
              */
             class Entry : public Node {
             public:
+                Entry(const std::string &key, const std::string &locale, const std::string &value);
+
                 Entry(const std::string& keyRaw, const std::string& keyValue, const std::string& localeRaw,
                       const std::string& localeValue, const std::string& valueRaw, const std::string& valueValue);
 
@@ -28,6 +30,8 @@ namespace XdgUtils {
                 void setValue(const std::string& newValue) override;
 
                 void write(std::ostream& output) const override;
+
+                Node* clone() const override;
 
                 /**
                  * Compare two Entries according to they fields values. Raw values will be ignored

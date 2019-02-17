@@ -19,6 +19,23 @@ namespace XdgUtils {
              */
             class AST {
             public:
+                AST();
+
+                // Copy constructor
+                AST(const AST& other);
+
+                // Copy assignment
+                AST& operator=(const AST& other);
+
+                // Move constructor
+                AST(AST&& other) noexcept;
+
+                // Move assignment
+                AST& operator=(AST&& other) noexcept;
+
+
+                std::vector<std::shared_ptr<Node>>& getEntries();
+
                 const std::vector<std::shared_ptr<Node>>& getEntries() const;
 
                 void setEntries(const std::vector<std::shared_ptr<Node>>& entries);

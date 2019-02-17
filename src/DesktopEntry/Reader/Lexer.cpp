@@ -5,7 +5,7 @@
 namespace XdgUtils {
     namespace DesktopEntry {
         namespace Reader {
-            Lexer::Lexer(std::istream& input) : input(input) {}
+            Lexer::Lexer(std::istream& input) : input(input), c('\0') {}
 
             Lexer::~Lexer() = default;
 

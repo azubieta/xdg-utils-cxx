@@ -19,6 +19,20 @@ namespace XdgUtils {
                 : keyRaw(keyRaw), keyValue(keyValue), localeRaw(localeRaw),
                   localeValue(localeValue), valueRaw(valueRaw), valueValue(valueValue) {}
 
+            Entry::Entry(const std::string& key, const std::string& locale, const std::string& value) :
+                keyRaw(key), keyValue(key) {
+
+                if (!locale.empty()) {
+                    localeRaw = ('[' + locale + ']');
+                    localeValue = (locale);
+                }
+
+                if (!value.empty()) {
+                    valueValue = value;
+                    valueRaw = '=' + value;
+                }
+            }
+
             std::string Entry::getValue() const {
                 return valueValue;
             }
@@ -50,6 +64,10 @@ namespace XdgUtils {
             std::ostream& operator<<(std::ostream& os, const Entry& entry) {
                 entry.write(os);
                 return os;
+            }
+
+            Node* Entry::clone() const {
+                return new Entry(*this);
             }
         }
     }
