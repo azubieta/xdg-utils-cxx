@@ -4,12 +4,13 @@ add_subdirectory(Reader)
 add_executable(
     TestXdgUtilsDesktopEntry
     TestDesktopEntry.cpp
-    TestDesktopEntryStringsValue.cpp
-    TestDesktopEntryExecValue.cpp
     TestDesktopEntryKeyPath.cpp
+    TestDesktopEntryValue.cpp
+    TestDesktopEntryExecValue.cpp
+    TestDesktopEntryStringsValue.cpp
 )
 
-target_include_directories(TestXdgUtilsDesktopEntry PRIVATE "${PROJECT_SOURCE_DIR}/src/desktop_entry")
+target_include_directories(TestXdgUtilsDesktopEntry PRIVATE "${PROJECT_SOURCE_DIR}/src/DesktopEntry")
 target_link_libraries(TestXdgUtilsDesktopEntry XdgUtils::DesktopEntry GTest::GTest GTest::Main)
 
 if(${CMAKE_VERSION} VERSION_LESS "3.10.0")
