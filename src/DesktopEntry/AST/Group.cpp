@@ -22,7 +22,7 @@ namespace XdgUtils {
 
                 auto pos = headerRawValue.find(headerValue);
 
-                headerRawValue.replace(pos, std::string::npos, newValue);
+                headerRawValue = '[' + newValue + ']';
                 headerValue = newValue;
             }
 

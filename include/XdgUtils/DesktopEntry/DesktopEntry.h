@@ -8,6 +8,8 @@
 
 // local
 #include <XdgUtils/DesktopEntry/Exceptions.h>
+#include <XdgUtils/DesktopEntry/DesktopEntryKeyPath.h>
+#include <XdgUtils/DesktopEntry/DesktopEntryKeyValue.h>
 
 namespace XdgUtils {
     namespace DesktopEntry {
@@ -76,6 +78,20 @@ namespace XdgUtils {
               */
             friend std::ostream& operator<<(std::ostream& os, const DesktopEntry& entry);
 
+
+            /**
+             * Access the key pointed by <keyPath> if it doesn't exist a new one will be created.
+             * @param keyPath
+             * @return
+             */
+            DesktopEntryKeyValue operator[](const DesktopEntryKeyPath& keyPath);
+
+            /**
+             * Access the key pointed by <keyPath> if it doesn't exist a new one will be created.
+             * @param keyPath
+             * @return
+             */
+            DesktopEntryKeyValue operator[](const std::string& keyPath);
 
             bool operator==(const DesktopEntry& rhs) const;
 
