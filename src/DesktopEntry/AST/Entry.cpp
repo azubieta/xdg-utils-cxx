@@ -29,8 +29,8 @@ namespace XdgUtils {
 
                 if (!value.empty()) {
                     valueValue = value;
-                    valueRaw = '=' + value;
                 }
+                valueRaw = '=' + value;
             }
 
             std::string Entry::getValue() const {

@@ -199,3 +199,27 @@ TEST_F(TestDesktopEntry, removeEntry) {
 
     ASSERT_EQ(out.str(), "[G1]\nName=1\n[g2]\nName=2\n");
 }
+
+TEST_F(TestDesktopEntry, arraySubscriptOperatorAccessGroup) {
+    DesktopEntry::DesktopEntry entry;
+
+    entry["Group"] = "Group";
+
+    std::stringstream out;
+    out << entry;
+
+    ASSERT_EQ(out.str(), "[Group]\n");
+}
+
+TEST_F(TestDesktopEntry, arraySubscriptOperatorAccessEntry) {
+    DesktopEntry::DesktopEntry entry;
+    entry["Group/Key"] = "My App";
+
+    ASSERT_EQ(static_cast<std::string>(entry["Group/Key"]), "My App");
+
+    std::stringstream out;
+    out << entry;
+
+    ASSERT_EQ(out.str(), "[Group]\n"
+                         "Key=My App");
+}

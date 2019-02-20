@@ -7,9 +7,10 @@ add_library(
     ${PROJECT_NAME} STATIC
 
     DesktopEntry.cpp
+    DesktopEntryKeyPath.cpp
+    DesktopEntryKeyValue.cpp
     DesktopEntryExecValue.cpp
     DesktopEntryStringsValue.cpp
-    DesktopEntryKeyPath.cpp
 
     $<TARGET_OBJECTS:XdgUtilsDesktopEntryAST>
     $<TARGET_OBJECTS:XdgUtilsDesktopEntryReader>

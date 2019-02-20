@@ -143,7 +143,7 @@ namespace XdgUtils {
         }
 
         DesktopEntryKeyPath::DesktopEntryKeyPath(const DesktopEntryKeyPath& other) {
-            *priv = *(other.priv);
+            priv.reset(new Priv(*other.priv));
         }
 
         DesktopEntryKeyPath& DesktopEntryKeyPath::operator=(const DesktopEntryKeyPath& other) {

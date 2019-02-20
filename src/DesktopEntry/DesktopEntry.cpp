@@ -11,6 +11,7 @@
 #include "Reader/Tokenizer.h"
 #include "Reader/Reader.h"
 #include "Reader/Errors.h"
+#include "DesktopEntryKeyValuePriv.h"
 
 namespace XdgUtils {
     namespace DesktopEntry {
@@ -65,6 +66,11 @@ namespace XdgUtils {
 
             void createEntry(const DesktopEntryKeyPath& keyPath, const std::string& value) {
                 auto group = std::dynamic_pointer_cast<AST::Group>(paths[keyPath.group()]);
+                // create group if it doesn't exists
+                if (!group) {
+                    createGroup(keyPath.group());
+                    group = std::dynamic_pointer_cast<AST::Group>(paths[keyPath.group()]);
+                }
 
                 // append entry to group
                 auto entry = std::make_shared<AST::Entry>(keyPath.key(), keyPath.locale(), value);
@@ -73,20 +79,6 @@ namespace XdgUtils {
 
                 // update paths
                 paths[keyPath.string()] = entry;
-            }
-
-            std::string createEntryPath(const std::string& groupName, const AST::Entry& entry) {
-                std::stringstream path;
-
-                if (!groupName.empty())
-                    path << groupName << '/';
-
-                path << entry.getKey();
-
-                if (!entry.getLocale().empty())
-                    path << '[' << entry.getLocale() << ']';
-
-                return path.str();
             }
 
             void removeGroup(const std::string& groupName) {
@@ -127,6 +119,18 @@ namespace XdgUtils {
                     // remove path
                     paths.erase(path);
                 }
+            }
+
+            std::shared_ptr<AST::Node> getOrCreateEntry(const DesktopEntryKeyPath& keyPath) {
+                auto itr = paths.find(keyPath.string());
+                if (itr == paths.end()) {
+                    if (keyPath.key().empty())
+                        createGroup(keyPath.group());
+                    else
+                        createEntry(keyPath, "");
+                }
+
+                return paths[keyPath.string()];
             }
         };
 
@@ -214,6 +218,16 @@ namespace XdgUtils {
 
         bool DesktopEntry::operator!=(const DesktopEntry& rhs) const {
             return !(rhs == *this);
+        }
+
+        DesktopEntryKeyValue DesktopEntry::operator[](const DesktopEntryKeyPath& keyPath) {
+            auto entry = priv->getOrCreateEntry(keyPath);
+
+            return DesktopEntryKeyValue(new DesktopEntryKeyValue::Priv(keyPath, entry));
+        }
+
+        DesktopEntryKeyValue DesktopEntry::operator[](const std::string& keyPath) {
+            return operator[](DesktopEntryKeyPath(keyPath));
         }
     }
 
