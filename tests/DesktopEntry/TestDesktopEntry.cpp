@@ -2,7 +2,7 @@
 
 #include <XdgUtils/DesktopEntry/DesktopEntry.h>
 
-using namespace XdgUtils;
+using namespace XdgUtils::DesktopEntry;
 
 class TestDesktopEntry : public ::testing::Test {
 protected:
@@ -29,13 +29,13 @@ protected:
 
 
 TEST_F(TestDesktopEntry, create) {
-    DesktopEntry::DesktopEntry a;
+    DesktopEntry a;
     auto entryPath = "Desktop Entry/Name";
     auto entryValue = "A";
     a.set(entryPath, entryValue);
 
     // Copy constructor
-    DesktopEntry::DesktopEntry b = a;
+    DesktopEntry b = a;
     ASSERT_EQ(a.get(entryPath), b.get(entryPath));
 
     ASSERT_EQ(a, b);
@@ -45,7 +45,7 @@ TEST_F(TestDesktopEntry, create) {
 }
 
 TEST_F(TestDesktopEntry, readWrite) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
     in >> entry;
@@ -57,7 +57,7 @@ TEST_F(TestDesktopEntry, readWrite) {
 }
 
 TEST_F(TestDesktopEntry, paths) {
-    DesktopEntry::DesktopEntry entry{
+    DesktopEntry entry{
         "[Desktop Entry]\n"
         "Version=1.0\n"
         "Type=Application\n"
@@ -104,7 +104,7 @@ TEST_F(TestDesktopEntry, get) {
                           "Name=Create a new Foo!\n"
                           "Icon=fooview-new\n";
 
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
 
     std::stringstream in(s);
     in >> entry;
@@ -115,7 +115,7 @@ TEST_F(TestDesktopEntry, get) {
 }
 
 TEST_F(TestDesktopEntry, set) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
     entry.set("A/B", "C");
 
     std::stringstream out;
@@ -126,7 +126,7 @@ TEST_F(TestDesktopEntry, set) {
 }
 
 TEST_F(TestDesktopEntry, edit) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
     in >> entry;
@@ -157,7 +157,7 @@ TEST_F(TestDesktopEntry, edit) {
 }
 
 TEST_F(TestDesktopEntry, exists) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
 
     std::stringstream in(exampleDesktopEntry);
     in >> entry;
@@ -167,7 +167,7 @@ TEST_F(TestDesktopEntry, exists) {
 }
 
 TEST_F(TestDesktopEntry, removeGroup) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
 
     std::string entryStr = {"[G1]\nName=1\n[g2]\nName=2\n"};
     std::stringstream in(entryStr);
@@ -184,7 +184,7 @@ TEST_F(TestDesktopEntry, removeGroup) {
 }
 
 TEST_F(TestDesktopEntry, removeEntry) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
 
     std::string entryStr = {"[G1]\nName=1\nIcon=1\n[g2]\nName=2\n"};
     std::stringstream in(entryStr);
@@ -201,7 +201,7 @@ TEST_F(TestDesktopEntry, removeEntry) {
 }
 
 TEST_F(TestDesktopEntry, arraySubscriptOperatorAccessGroup) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
 
     entry["Group"] = "Group";
 
@@ -212,7 +212,7 @@ TEST_F(TestDesktopEntry, arraySubscriptOperatorAccessGroup) {
 }
 
 TEST_F(TestDesktopEntry, arraySubscriptOperatorAccessEntry) {
-    DesktopEntry::DesktopEntry entry;
+    DesktopEntry entry;
     entry["Group/Key"] = "My App";
 
     ASSERT_EQ(static_cast<std::string>(entry["Group/Key"]), "My App");
@@ -222,4 +222,27 @@ TEST_F(TestDesktopEntry, arraySubscriptOperatorAccessEntry) {
 
     ASSERT_EQ(out.str(), "[Group]\n"
                          "Key=My App");
+}
+
+TEST_F(TestDesktopEntry, copy) {
+    DesktopEntry a;
+    a["g/k"] = "v";
+
+    // Assert that values are copied
+    DesktopEntry b = a;
+    ASSERT_EQ(static_cast<std::string>(b["g/k"]), "v");
+
+    // Assert that b inner data pointers are different from the a ones
+    b["g/k"] = "v1";
+    ASSERT_EQ(static_cast<std::string>(a["g/k"]), "v");
+    ASSERT_EQ(static_cast<std::string>(b["g/k"]), "v1");
+}
+
+TEST_F(TestDesktopEntry, move) {
+    DesktopEntry a;
+    a["g/k"] = "v";
+
+    // Assert that values are copied
+    DesktopEntry b = std::move(a);
+    ASSERT_EQ(static_cast<std::string>(b["g/k"]), "v");
 }

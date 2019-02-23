@@ -150,6 +150,24 @@ namespace XdgUtils {
             priv->updatePaths();
         }
 
+        DesktopEntry& DesktopEntry::operator=(const DesktopEntry& other) {
+            priv->ast = other.priv->ast;
+            priv->updatePaths();
+
+            return *this;
+        }
+
+        DesktopEntry::DesktopEntry::DesktopEntry(DesktopEntry&& other) noexcept {
+            priv = std::move(other.priv);
+        }
+
+
+        DesktopEntry& DesktopEntry::operator=(DesktopEntry&& other) noexcept {
+            priv = std::move(other.priv);
+
+            return *this;
+        }
+
         DesktopEntry::~DesktopEntry() = default;
 
         std::string DesktopEntry::get(const std::string& path, const std::string& fallback) const {
@@ -219,6 +237,7 @@ namespace XdgUtils {
         bool DesktopEntry::operator!=(const DesktopEntry& rhs) const {
             return !(rhs == *this);
         }
+
 
         DesktopEntryKeyValue DesktopEntry::operator[](const DesktopEntryKeyPath& keyPath) {
             auto entry = priv->getOrCreateEntry(keyPath);

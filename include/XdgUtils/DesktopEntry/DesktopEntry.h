@@ -30,6 +30,12 @@ namespace XdgUtils {
 
             DesktopEntry(const DesktopEntry& other);
 
+            DesktopEntry& operator=(const DesktopEntry& other);
+
+            DesktopEntry(DesktopEntry&& other) noexcept;
+
+            DesktopEntry& operator=(DesktopEntry&& other) noexcept;
+
             virtual ~DesktopEntry();
 
             /**
