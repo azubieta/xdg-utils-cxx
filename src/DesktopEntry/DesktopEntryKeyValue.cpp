@@ -3,6 +3,7 @@
 
 // local
 #include <XdgUtils/DesktopEntry/DesktopEntryKeyValue.h>
+#include <XdgUtils/DesktopEntry/Exceptions.h>
 #include "DesktopEntryKeyValuePriv.h"
 
 namespace XdgUtils {
@@ -30,8 +31,14 @@ namespace XdgUtils {
             // lower
             std::transform(valueStr.begin(), valueStr.end(), valueStr.begin(), ::tolower);
 
-            const auto trueStrPos = valueStr.find("true");
-            return trueStrPos != std::string::npos;
+            if (valueStr.find("true") != std::string::npos)
+                return true;
+
+            if (valueStr.find("false") != std::string::npos)
+                return false;
+
+            // the value is not a bool
+            throw XdgUtils::DesktopEntry::BadCast("DesktopEntryKeyValue " + valueStr + " can't be converted to bool");
         }
 
         DesktopEntryKeyValue& DesktopEntryKeyValue::operator=(bool value) {

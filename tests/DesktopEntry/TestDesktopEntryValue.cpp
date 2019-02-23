@@ -74,6 +74,15 @@ TEST(TestDesktopEntryKeyValue, boolCasting) {
     ASSERT_FALSE(static_cast<bool>(value));
 }
 
+TEST(TestDesktopEntryKeyValue, badBoolCasting) {
+    DesktopEntryKeyPath path("Group/Entry");
+    auto astNode = std::make_shared<AST::Entry>("Entry", "", "not a bool");
+
+    FakeDesktopEntryKeyValue valueImpl(path, astNode);
+    DesktopEntryKeyValue& value = valueImpl;
+
+    ASSERT_THROW(static_cast<bool>(value), XdgUtils::DesktopEntry::BadCast);
+}
 
 TEST(TestDesktopEntryKeyValue, intCasting) {
     FakeDesktopEntryKeyValue valueImpl(DesktopEntryKeyPath("Group/Entry"),
