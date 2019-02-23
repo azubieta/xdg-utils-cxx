@@ -24,5 +24,10 @@ namespace XdgUtils {
         public:
             explicit MalformedPathError(const std::string& what) : DesktopEntryError(what) {}
         };
+
+        class BadCast : public DesktopEntryError {
+        public:
+            explicit BadCast(const std::string& what) : DesktopEntryError(what) {}
+        };
     }
 }
