@@ -26,19 +26,21 @@ target_include_directories(
     PUBLIC $<INSTALL_INTERFACE:${XDG_UTILS_HEADER_DIR}>  # <prefix>/include/XdgUtils
 )
 
-set_target_properties(
-    ${PROJECT_NAME} PROPERTIES
-    PUBLIC_HEADER "${PUBLIC_HEADERS_DIR}/XdgUtils/DesktopEntry/DesktopEntry.h;${PUBLIC_HEADERS_DIR}/XdgUtils/DesktopEntry/Exceptions.h;"
-)
-
 add_library(XdgUtils::DesktopEntry ALIAS ${PROJECT_NAME})
+
+# Install library headers
+install(
+    DIRECTORY ${PUBLIC_HEADERS_DIR}/XdgUtils/DesktopEntry
+    DESTINATION ${XDG_UTILS_HEADER_DIR}/XdgUtils
+    COMPONENT BaseDir-Dev
+)
 
 # Install library files
 install(
     TARGETS ${PROJECT_NAME}
     EXPORT DesktopEntry
     ARCHIVE DESTINATION ${XDG_UTILS_LIB_DIR} COMPONENT DesktopEntry
-    PUBLIC_HEADER DESTINATION ${XDG_UTILS_HEADER_DIR}/DesktopEntry COMPONENT DesktopEntry-Dev
+    PUBLIC_HEADER DESTINATION ${XDG_UTILS_HEADER_DIR}/XdgUtils/DesktopEntry COMPONENT DesktopEntry-Dev
 )
 
 # Install cmake config files
