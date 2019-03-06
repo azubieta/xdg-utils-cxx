@@ -15,19 +15,21 @@ target_include_directories(
     PUBLIC $<INSTALL_INTERFACE:${XDG_UTILS_HEADER_DIR}>  # <prefix>/include/XdgUtils
 )
 
-set_target_properties(
-    ${PROJECT_NAME} PROPERTIES
-    PUBLIC_HEADER "${PUBLIC_HEADERS_DIR}/XdgUtils/BaseDir/BaseDir.h;"
-)
-
 add_library(XdgUtils::BaseDir ALIAS ${PROJECT_NAME})
+
+# Install library headers
+install(
+    DIRECTORY ${PUBLIC_HEADERS_DIR}/XdgUtils/BaseDir
+    DESTINATION ${XDG_UTILS_HEADER_DIR}/XdgUtils
+    COMPONENT BaseDir-Dev
+)
 
 # Install library files
 install(
     TARGETS ${PROJECT_NAME}
     EXPORT BaseDir
     ARCHIVE DESTINATION ${XDG_UTILS_LIB_DIR} COMPONENT BaseDir
-    PUBLIC_HEADER DESTINATION ${XDG_UTILS_HEADER_DIR}/BaseDir COMPONENT BaseDir-Dev
+    PUBLIC_HEADER DESTINATION ${XDG_UTILS_HEADER_DIR}/XdgUtils/BaseDir COMPONENT BaseDir-Dev
 )
 
 # Install cmake config files

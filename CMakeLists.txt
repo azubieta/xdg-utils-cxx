@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(
     XdgUtils
-    VERSION 0.1.0
+    VERSION 0.1.1
     DESCRIPTION "Freedesktop standards C++ implementation"
     LANGUAGES CXX
 )
@@ -17,7 +17,7 @@ option(XDG_UTILS_BASE_DIR "Build Base Directory" ON)
 # Instalation paths
 set(XDG_UTILS_BIN_DIR bin CACHE PATH "Binaries install directory")
 set(XDG_UTILS_LIB_DIR lib/XdgUtils CACHE PATH "Libraries install directory")
-set(XDG_UTILS_HEADER_DIR include/XdgUtils CACHE PATH "Public Headers install directory")
+set(XDG_UTILS_HEADER_DIR include CACHE PATH "Public Headers install directory")
 set(XDG_UTILS_CMAKE_DIR lib/cmake/XdgUtils CACHE PATH "Cmake configs install directory")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
