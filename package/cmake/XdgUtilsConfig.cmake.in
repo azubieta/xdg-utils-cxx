@@ -1,0 +1,25 @@
+set(@PROJECT_NAME@_VERSION @PROJECT_VERSION@)
+
+@PACKAGE_INIT@
+
+set_and_check(XDGUTILS_LIBDIR @PACKAGE_PROJECT_INSTALL_LIBDIR@)
+set_and_check(XDGUTILS_INCLUDE_DIRECTORIES @PACKAGE_PROJECT_INSTALL_INCLUDEDIR@)
+
+set(XDGUTILS_LINK_LIBRARIES @PROJECT_INSTALL_LIBS@)
+
+## Try to find the required components
+foreach(comp ${@PROJECT_NAME@_FIND_COMPONENTS})
+    set(COMPONENT_TARGETS_FILE "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@${comp}.cmake")
+    if(EXISTS "${COMPONENT_TARGETS_FILE}")
+        set(@PROJECT_NAME@_${comp}_FOUND TRUE)
+        include("${COMPONENT_TARGETS_FILE}")
+
+        message(STATUS "@PROJECT_NAME@::${comp} found")
+    else()
+        if(@PROJECT_NAME@_FIND_REQUIRED_${comp})
+            message(FATAL_ERROR "@PROJECT_NAME@::${comp} not found !")
+        endif()
+    endif()
+endforeach()
+
+check_required_components(@PROJECT_NAME@)

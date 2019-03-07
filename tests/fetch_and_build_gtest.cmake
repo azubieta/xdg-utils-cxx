@@ -1,3 +1,4 @@
+
 # Fetch and build GoogleTest if not present in the system
 if(NOT TARGET GTest)
     include(ExternalProject)
@@ -34,8 +35,8 @@ if(NOT TARGET GTest)
         INTERFACE_LINK_LIBRARIES pthread
     )
 
-    add_dependencies(GTest::GTest googletest-remote)
-    add_dependencies(GTest::Main googletest-remote)
+    add_dependencies(GTest::GTest googletest)
+    add_dependencies(GTest::Main googletest)
 endif()
 
 include(GoogleTest)

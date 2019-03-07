@@ -1,11 +1,8 @@
-add_library(
-    XdgUtilsDesktopEntryReader OBJECT
+set(srcs Lexer.cpp Token.cpp Tokenizer.cpp Reader.cpp)
 
-    Lexer.cpp
-    Token.cpp
-    Tokenizer.cpp
-    Reader.cpp
-    Errors.h
-)
+add_library(XdgUtilsDesktopEntryReader OBJECT ${srcs})
 
-target_include_directories(XdgUtilsDesktopEntryReader PRIVATE "${PROJECT_SOURCE_DIR}")
+target_include_directories(XdgUtilsDesktopEntryReader
+    PUBLIC $<BUILD_INTERFACE:${DesktopEntry_SOURCES_DIR}>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    )
