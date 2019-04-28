@@ -1,6 +1,11 @@
 function(add_xdgutils_module name srcs)
-    message("-- Creating module target: ${name}")
-    add_library(${name} STATIC ${srcs})
+    if(XDG_UTILS_SHARED)
+        message("Creating ${name} as SHARED library")
+        add_library(${name} SHARED ${srcs})
+    else()
+        message("-- Creating module target: ${name} STATIC")
+        add_library(${name} STATIC ${srcs})
+    endif()
 
     message("-- Creating module target alias: ${PROJECT_NAME}::${name}")
     add_library(${PROJECT_NAME}::${name} ALIAS ${name})

@@ -5,6 +5,7 @@ set(PROJECT_DESCRIPTION "Freedesktop standards C++ implementation")
 set(PROJECT_HOMEPAGE_URL https://github.com/azubieta/xdg-utils-cxx)
 
 ## Configuration options
+option(XDG_UTILS_SHARED "Build shared libs instead of static" OFF)
 option(XDG_UTILS_TESTS "Build tests" OFF)
 option(XDG_UTILS_CODE_COVERAGE "Build Code Coverage report" OFF)
 
