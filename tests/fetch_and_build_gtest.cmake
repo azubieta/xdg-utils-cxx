@@ -1,6 +1,6 @@
-
+find_package(GTest)
 # Fetch and build GoogleTest if not present in the system
-if(NOT TARGET GTest)
+if(NOT TARGET GTest::GTest)
     include(ExternalProject)
     externalproject_add(
         googletest
