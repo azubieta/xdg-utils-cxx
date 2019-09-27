@@ -9,7 +9,7 @@ namespace XdgUtils {
             Group::Group(const std::string& headerRawValue, const std::string& headerValue) : headerRawValue(
                 headerRawValue), headerValue(headerValue) {
                 if (headerValue.empty())
-                    throw std::runtime_error("Group Header cannot be emtpy");
+                    throw std::runtime_error("Group Header cannot be empty");
             }
 
             std::string Group::getValue() const {
@@ -18,7 +18,7 @@ namespace XdgUtils {
 
             void Group::setValue(const std::string& newValue) {
                 if (newValue.empty())
-                    throw std::runtime_error("Group Header cannot be emtpy");
+                    throw std::runtime_error("Group Header cannot be empty");
 
                 auto pos = headerRawValue.find(headerValue);
 
