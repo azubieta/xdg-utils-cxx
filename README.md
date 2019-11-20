@@ -5,10 +5,11 @@
 
 Implementation of the Free Desktop Standards in C++. 
 
-This is a project was started to fulfill the need of a reliable implementations of such standards in the AppImage 
+This project was started to fulfill the need of a reliable implementations of such standards in the AppImage
 project. It is totally standalone and only depends on the standard c++ libraries (stdlib). 
  
-It has been split in different modules according to the Free Desktop Standards, currently are implemented:
+It has been split in different modules according to the Free Desktop Standards.
+The current implemented ones are:
 -  [Desktop Entry 1.2](https://standards.freedesktop.org/desktop-entry-spec/1.2/) (mostly complete)
 -  [Base Dir 0.7](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) (draft)
 
