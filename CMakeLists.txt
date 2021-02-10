@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(XdgUtils)
-set(PROJECT_VERSION 0.1.1)
+set(PROJECT_VERSION 1.0.1)
 set(PROJECT_DESCRIPTION "Freedesktop standards C++ implementation")
 set(PROJECT_HOMEPAGE_URL https://github.com/azubieta/xdg-utils-cxx)
 
