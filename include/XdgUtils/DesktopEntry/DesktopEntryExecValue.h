@@ -48,6 +48,13 @@ namespace XdgUtils {
              */
             void remove(int pos);
 
+            /**
+             * Quote path for use in desktop entry.
+             * For use with keys like Exec, TryExec.
+             * @param string
+             */
+            static std::string quotePath(const std::string& string);
+
         private:
             struct Priv;
             std::unique_ptr<Priv> priv;

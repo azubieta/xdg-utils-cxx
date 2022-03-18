@@ -55,3 +55,23 @@ TEST(TestDesktopDesktopEntryExecValue, remove) {
     ASSERT_EQ(stringList.size(), 1);
     ASSERT_EQ(stringList[0], "2");
 }
+
+TEST(TestDesktopDesktopEntryExecValue, testQuoteComplexPath) {
+    const std::string testPath = "/home/abc/Applications/a \t <>~ | % ;#()? \" b c $ `.AppImage";
+    const std::string expectedQuotedPath = "\"/home/abc/Applications/a \t <>~ | % ;#()? \\\" b c \\$ \\`.AppImage\"";
+
+    const auto quotedPath = DesktopEntryExecValue::quotePath(testPath);
+
+    std::cout << quotedPath << std::endl;
+    std::cout << expectedQuotedPath << std::endl;
+
+    EXPECT_EQ(quotedPath, expectedQuotedPath);
+}
+
+TEST(TestDesktopDesktopEntryExecValue, testQuoteSimplePath) {
+    const std::string testPath = R"(/home/abc/Applications/abc.AppImage)";
+
+    const auto quotedPath = DesktopEntryExecValue::quotePath(testPath);
+
+    EXPECT_EQ(quotedPath, testPath);
+}
