@@ -1,7 +1,7 @@
 SET(PROJECT_TESTS_TARGETS "" CACHE INTERNAL "Available tests targets")
 
-function(add_gtest name srcs)
-    add_executable(${name} ${srcs})
+function(add_gtest name)
+    add_executable(${name} ${ARGN})
     target_link_libraries(${name} GTest::GTest GTest::Main)
 
     if(${CMAKE_VERSION} VERSION_LESS "3.10.0")
