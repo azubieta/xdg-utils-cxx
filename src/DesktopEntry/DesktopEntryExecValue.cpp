@@ -5,14 +5,12 @@
 
 // local
 #include <XdgUtils/DesktopEntry/DesktopEntryExecValue.h>
-#include <set>
+#include <algorithm>
 
 namespace XdgUtils {
     namespace DesktopEntry {
         struct DesktopEntryExecValue::Priv {
             std::vector<std::string> sections;
-            std::string escapedCharacters = "\"`$\\";
-            std::string reservedCharacters = " \t\n\"\'\\<>~|&;$*?#()`";
 
             void parse(const std::string& value) {
                 // marks when the next char was escaped
@@ -66,38 +64,21 @@ namespace XdgUtils {
 
             std::string dump() {
                 bool firstSection = true;
+
                 std::stringstream res;
+
                 for (const auto& section: sections) {
-                    if (firstSection)
+                    if (firstSection) {
                         firstSection = false;
-                    else
+                    } else {
                         res << " ";
+                    }
 
-                    if (containsReservedCharacter(section)) {
-                        // dump escaped section
-                        res << "\"";
-                        for (const auto& c: section) {
-                            if (escapedCharacters.find(c) != std::string::npos)
-                                res << "\\";
-                            res << c;
-                        }
-                        res << "\"";
-
-                    } else
-                        res << section;
-
+                    res << quotePath(section);
                 }
+
                 return res.str();
             }
-
-            bool containsReservedCharacter(const std::string& string) {
-                for (const auto& c: string)
-                    if (reservedCharacters.find(c) != std::string::npos)
-                        return true;
-
-                return false;
-            }
-
         };
 
         DesktopEntryExecValue::DesktopEntryExecValue() : priv(new Priv()) {}
@@ -126,6 +107,37 @@ namespace XdgUtils {
 
         void DesktopEntryExecValue::remove(int pos) {
             priv->sections.erase(priv->sections.begin() + pos);
+        }
+
+        std::string DesktopEntryExecValue::quotePath(const std::string& string) {
+            // these characters need to be escaped with a backslash (\)
+            static const std::string charactersToEscape = "\"`$\\";
+            // the following characters don't require escaping but can be used fine with simple quoting
+            static const std::string charactersWhichRequireQuoting = " \t\n\'<>~|&;*?#()";
+            // we may need the combined list more than once and therefore cache it in a variable
+            static const std::string reservedCharacters = charactersWhichRequireQuoting + charactersToEscape;
+
+            std::ostringstream res;
+
+            // some paths don't need to be quoted
+            // in that case, we don't prepend/append quotes
+            bool needsToBeQuoted = std::find_if(string.begin(), string.end(), [](const char c) {
+                return reservedCharacters.find(c) != std::string::npos;
+            }) != string.end();
+
+            if (!needsToBeQuoted) {
+                return string;
+            }
+
+            res << "\"";
+            for (const auto& c: string) {
+                if (charactersToEscape.find(c) != std::string::npos)
+                    res << "\\";
+                res << c;
+            }
+            res << "\"";
+
+            return res.str();
         }
     }
 }
